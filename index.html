@@ -97,9 +97,167 @@
       .btn-surface:hover { transform: translateY(-2px) scale(1.02); }
       .btn-surface:active { transform: translateY(2px) scale(0.975); filter: brightness(0.9); }
       .btn-surface img { width: 100%; height: 100%; display: block; border-radius: inherit; }
+      /* Mobile FAQ overrides */
+      @media (max-width: 767px) {
+        .faq-mobile-bg { background-size: cover; background-position: center; }
+        .faq-wrap-mobile { position: relative; margin: 0 auto; width: calc(100% - 16px); max-width: 420px; padding: 0; border-radius: 32px; background: #006200; border: 1px solid #000; overflow: hidden; box-shadow: 0 4px 0 #003b00; }
+        /* Alternating header tones, no inner separators */
+        .faq-wrap-mobile .faq-item-header { width: 100%; height: 56px; padding: 0 16px 0 28px; display:flex; align-items:center; }
+        .faq-wrap-mobile .faq-item:nth-child(odd) .faq-item-header { background:#0a6f00; }
+        .faq-wrap-mobile .faq-item:nth-child(even) .faq-item-header { background:#096800; }
+        .faq-wrap-mobile .faq-item:first-child .faq-item-header { border-top-left-radius:20px; border-top-right-radius:20px; }
+        .faq-wrap-mobile .faq-item:last-child .faq-item-header { border-bottom-left-radius:20px; border-bottom-right-radius:20px; }
+        .faq-wrap-mobile .faq-title { font-size: 20px; letter-spacing: 0; text-shadow: 0 2px 0 #000; }
+        .faq-wrap-mobile .faq-toggle { font-size: 14px; padding: 6px 10px; }
+        .faq-wrap-mobile .faq-answer { margin-left: 28px; max-width: calc(100% - 44px); font-size: 17px; line-height: 1.35; padding: 0 16px 12px 0; }
+        .faq-wrap-mobile .faq-item.open .faq-answer { max-height: 600px; }
+        .faq-wrap-mobile .faq-item { margin-bottom: 0; }
+        .faq-bg-img { display:block; width:100%; height:auto; pointer-events:none; }
+        .faq-panel { position:absolute; left:50%; transform:translateX(-50%); top:450px; }
+      }
     </style>
   </head>
   <body class="bg-[#0d1f10] text-white">
+    <!-- ============ MOBILE VERSION (images stacked in design order) ============ -->
+    <div class="md:hidden">
+      <!-- Mobile Hero with pixel positioned overlays -->
+      <section id="m-hero" class="relative">
+        <img src="./assets/mobile/Hero_section.png" alt="Hero section" class="block w-full h-auto select-none" />
+        <!-- Menu button (overlay) -->
+        <button id="menuBtn" aria-label="Menu" class="absolute right-4 top-4 w-[88px] h-[88px]">
+          <img src="./assets/mobile/Menu.png" alt="Menu" class="w-full h-full" />
+        </button>
+        <!-- Join CTA (overlay) -->
+        <a href="#stake" class="absolute left-1/2 -translate-x-1/2 bottom-[120px] w-[320px] h-[64px]" aria-label="Join the cup">
+          <img src="./assets/mobile/joini-butt.png" alt="Join" class="w-full h-full" />
+        </a>
+      </section>
+      <!-- What is + Get Started (overlay), pulled up towards hero -->
+      <section id="m-what-is" class="relative -mt-[40px]">
+        <img src="./assets/mobile/what_is_section.png" alt="What is section" class="block w-full h-auto select-none" />
+        <a href="#stake" class="absolute left-1/2 -translate-x-1/2 bottom-[48px] inline-block" aria-label="Get started">
+          <img src="./assets/mobile/get_started.png" alt="Get started" class="w-[320px] h-auto" />
+        </a>
+      </section>
+      <section id="m-stake" class="relative -mt-[30px]">
+        <img src="./assets/mobile/stake_somi_section.png" alt="Stake SOMI section" class="block w-full h-auto select-none" />
+      </section>
+      <section id="m-how" class="relative -mt-[160px]">
+        <img src="./assets/mobile/how_the_section.png" alt="How the cup works section" class="block w-full h-auto select-none" />
+      </section>
+      <!-- Mobile ticker (marquee) -->
+      <section id="m-ticker" class="relative h-[120px] bg-[#0f0f0f] overflow-hidden -mt-[20px]">
+        <div class="ticker-mask">
+          <div class="ticker-row ticker-row-1">
+            <div class="ticker-content text-[64px] leading-[96px] font-normal uppercase">
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+            </div>
+            <div class="ticker-content text-[64px] leading-[96px] font-normal uppercase" aria-hidden="true">
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <img src="./assets/mobile/rewards_section.png" alt="Rewards section" class="block w-full h-auto select-none" />
+      <img src="./assets/mobile/golden_boots_section.png" alt="Golden boots" class="block w-full h-auto select-none" />
+      <!-- Why join with overlaid join button at the seam -->
+      <section id="m-why" class="relative">
+        <img src="./assets/mobile/why_join_section.png" alt="Why join section" class="block w-full h-auto select-none" />
+        <a href="#stake" class="absolute left-1/2 -translate-x-1/2 bottom-[-24px] inline-block z-10" aria-label="Join">
+          <img src="./assets/mobile/joini-butt2.png" alt="Join" class="w-[320px] h-auto" />
+        </a>
+      </section>
+      <!-- Interactive Mobile FAQ over full mobile background -->
+      <section id="m-faq" class="relative">
+        <img src="./assets/mobile/faq_section.png" alt="FAQ background" class="faq-bg-img select-none" />
+        <div class="faq-wrap-mobile faq-panel">
+          <div class="faq-item tone-a open" style="position: relative;">
+            <div class="faq-item-header" style="border-radius:20px 20px 0 0; background:#0a6f00;">
+              <div class="faq-title">WHAT IS THE SOMNIA STAKING CUP?</div>
+              <button class="faq-toggle" aria-expanded="true">
+                <span class="ball" aria-hidden="true">⚽</span>
+                <span>Close</span>
+              </button>
+            </div>
+            <div class="faq-answer">
+              It’s a gamified staking competition where Stakers and Validators compete for token rewards, NFTs, and boosted APR over the course of a year.
+            </div>
+          </div>
+          <div class="faq-item tone-b">
+            <div class="faq-item-header" style="background:#096800;">
+              <div class="faq-title">HOW DO I JOIN?</div>
+              <button class="faq-toggle" aria-expanded="false">
+                <span class="ball" aria-hidden="true">⚽</span>
+                <span>Expand</span>
+              </button>
+            </div>
+            <div class="faq-answer">Answer goes here.</div>
+          </div>
+          <div class="faq-item tone-a">
+            <div class="faq-item-header" style="background:#0a6f00;">
+              <div class="faq-title">WHAT’S THE LEADERBOARD?</div>
+              <button class="faq-toggle" aria-expanded="false">
+                <span class="ball" aria-hidden="true">⚽</span>
+                <span>Expand</span>
+              </button>
+            </div>
+            <div class="faq-answer">Answer goes here.</div>
+          </div>
+          <div class="faq-item tone-b">
+            <div class="faq-item-header" style="background:#096800;">
+              <div class="faq-title">WHAT ARE STAKER NFTS?</div>
+              <button class="faq-toggle" aria-expanded="false">
+                <span class="ball" aria-hidden="true">⚽</span>
+                <span>Expand</span>
+              </button>
+            </div>
+            <div class="faq-answer">Answer goes here.</div>
+          </div>
+          <div class="faq-item tone-a">
+            <div class="faq-item-header" style="background:#0a6f00;">
+              <div class="faq-title">WHAT’S A GOLDEN STAKER NFT?</div>
+              <button class="faq-toggle" aria-expanded="false">
+                <span class="ball" aria-hidden="true">⚽</span>
+                <span>Expand</span>
+              </button>
+            </div>
+            <div class="faq-answer">Answer goes here.</div>
+          </div>
+          <div class="faq-item tone-b">
+            <div class="faq-item-header" style="background:#096800;">
+              <div class="faq-title">WHAT DO VALIDATORS GET?</div>
+              <button class="faq-toggle" aria-expanded="false">
+                <span class="ball" aria-hidden="true">⚽</span>
+                <span>Expand</span>
+              </button>
+            </div>
+            <div class="faq-answer">Answer goes here.</div>
+          </div>
+          <div class="faq-item tone-a">
+            <div class="faq-item-header" style="border-radius:0 0 20px 20px; background:#0a6f00;">
+              <div class="faq-title">ARE REWARDS ONLY MONTHLY?</div>
+              <button class="faq-toggle" aria-expanded="false">
+                <span class="ball" aria-hidden="true">⚽</span>
+                <span>Expand</span>
+              </button>
+            </div>
+            <div class="faq-answer">Answer goes here.</div>
+          </div>
+        </div>
+      </section>
+      <section id="m-footer" class="relative -mt-[40px]">
+        <img src="./assets/mobile/footer_section.png" alt="Footer section" class="block w-full h-auto select-none" />
+      </section>
+    </div>
+
+    <!-- ============ DESKTOP VERSION (hidden on mobile) ============ -->
+    <div class="hidden md:block">
     <!-- ============ NAVBAR REMOVED (using in-hero nav) ============ -->
 
     <!-- ============ HERO ============ -->
@@ -225,8 +383,8 @@
       <div class="mx-auto max-w-5xl px-4 py-12 md:py-0 h-full flex items-center">
         <div class="w-full">
           <div class="faq-wrap">
-            <div class="faq-item tone-a open" style="position: relative;">
-              <div class="faq-item-header">
+          <div class="faq-item tone-a open" style="position: relative;">
+            <div class="faq-item-header">
                 <div class="faq-title">WHAT IS THE SOMNIA STAKING CUP?</div>
                 <button class="faq-toggle" aria-expanded="true">
                 <span class="ball" aria-hidden="true">⚽</span>
@@ -238,8 +396,8 @@
                 It’s a gamified staking competition where Stakers and Validators compete for token rewards, NFTs, and boosted APR over the course of a year.
               </div>
             </div>
-            <div class="faq-item tone-b">
-              <div class="faq-item-header">
+          <div class="faq-item tone-b">
+            <div class="faq-item-header">
                 <div class="faq-title">HOW DO I JOIN?</div>
                 <button class="faq-toggle" aria-expanded="false">
                 <span class="ball" aria-hidden="true">⚽</span>
@@ -251,8 +409,8 @@
                 <img src="./assets/IMG_3478 1.png" alt="Chicken" class="faq-chicken" />
               </div>
             </div>
-            <div class="faq-item tone-a">
-              <div class="faq-item-header">
+          <div class="faq-item tone-a">
+            <div class="faq-item-header">
                 <div class="faq-title">WHAT’S THE LEADERBOARD?</div>
                 <button class="faq-toggle" aria-expanded="false">
                 <span class="ball" aria-hidden="true">⚽</span>
@@ -264,8 +422,8 @@
                 <img src="./assets/IMG_3478 1.png" alt="Chicken" class="faq-chicken" />
               </div>
             </div>
-            <div class="faq-item tone-b">
-              <div class="faq-item-header">
+          <div class="faq-item tone-b">
+            <div class="faq-item-header">
                 <div class="faq-title">WHAT ARE STAKER NFTS?</div>
                 <button class="faq-toggle" aria-expanded="false">
                 <span class="ball" aria-hidden="true">⚽</span>
@@ -277,8 +435,8 @@
                 <img src="./assets/IMG_3478 1.png" alt="Chicken" class="faq-chicken" />
               </div>
             </div>
-            <div class="faq-item tone-a">
-              <div class="faq-item-header">
+          <div class="faq-item tone-a">
+            <div class="faq-item-header">
                 <div class="faq-title">WHAT’S A GOLDEN STAKER NFT?</div>
                 <button class="faq-toggle" aria-expanded="false">
                 <span class="ball" aria-hidden="true">⚽</span>
@@ -290,8 +448,8 @@
                 <img src="./assets/IMG_3478 1.png" alt="Chicken" class="faq-chicken" />
               </div>
             </div>
-            <div class="faq-item tone-b">
-              <div class="faq-item-header">
+          <div class="faq-item tone-b">
+            <div class="faq-item-header">
                 <div class="faq-title">WHAT DO VALIDATORS GET?</div>
                 <button class="faq-toggle" aria-expanded="false">
                 <span class="ball" aria-hidden="true">⚽</span>
@@ -303,8 +461,8 @@
                 <img src="./assets/IMG_3478 1.png" alt="Chicken" class="faq-chicken" />
               </div>
             </div>
-            <div class="faq-item tone-a">
-              <div class="faq-item-header">
+          <div class="faq-item tone-a">
+            <div class="faq-item-header">
                 <div class="faq-title">ARE REWARDS ONLY MONTHLY?</div>
                 <button class="faq-toggle" aria-expanded="false">
                 <span class="ball" aria-hidden="true">⚽</span>
@@ -333,6 +491,7 @@
         <div class="w-full"></div>
       </div>
     </footer>
+    </div>
 
     <!-- Mobile menu toggling -->
     <script>
@@ -344,12 +503,12 @@
         nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.add('hidden')));
       }
 
-      // FAQ accordion interactions
-      document.querySelectorAll('.faq-wrap .faq-toggle').forEach(toggle => {
+      // FAQ accordion interactions (desktop + mobile)
+      document.querySelectorAll('.faq-wrap .faq-toggle, .faq-wrap-mobile .faq-toggle').forEach(toggle => {
         toggle.addEventListener('click', () => {
           const item = toggle.closest('.faq-item');
           const isOpen = item.classList.contains('open');
-          // close all others
+          // close all others within this wrapper only
           item.parentElement.querySelectorAll('.faq-item').forEach(i => {
             i.classList.remove('open');
             const t = i.querySelector('.faq-toggle');
