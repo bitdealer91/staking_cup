@@ -116,6 +116,7 @@
         .faq-panel { position:absolute; left:50%; transform:translateX(-50%); top:450px; }
       }
     </style>
+    <link rel="stylesheet" href="./mobile-faq.css?v=2" />
   </head>
   <body class="bg-[#0d1f10] text-white">
     <!-- ============ MOBILE VERSION (images stacked in design order) ============ -->
@@ -176,78 +177,65 @@
       <!-- Interactive Mobile FAQ over full mobile background -->
       <section id="m-faq" class="relative">
         <img src="./assets/mobile/faq_section.png" alt="FAQ background" class="faq-bg-img select-none" />
-        <div class="faq-wrap-mobile faq-panel">
-          <div class="faq-item tone-a open" style="position: relative;">
-            <div class="faq-item-header" style="border-radius:20px 20px 0 0; background:#0a6f00;">
-              <div class="faq-title">WHAT IS THE SOMNIA STAKING CUP?</div>
-              <button class="faq-toggle" aria-expanded="true">
-                <span class="ball" aria-hidden="true">⚽</span>
+        <div class="mfaq-panel faq-panel" style="top:450px;">
+          <div class="mfaq-panel-inner">
+            <!-- Row 1 (open) -->
+            <div class="mfaq-item tone-a open" data-index="0" style="top:0px; height:115px;">
+              <div class="mfaq-title">WHAT IS THE SOMNIA STAKING CUP?</div>
+              <button class="mfaq-toggle" aria-expanded="true">
+                <span class="ball">⚽</span>
                 <span>Close</span>
               </button>
+              <div class="mfaq-answer-row">
+                It’s a gamified staking competition where Stakers and Validators compete for token rewards, NFTs, and boosted APR over the course of a year.
+              </div>
             </div>
-            <div class="faq-answer">
-              It’s a gamified staking competition where Stakers and Validators compete for token rewards, NFTs, and boosted APR over the course of a year.
-            </div>
-          </div>
-          <div class="faq-item tone-b">
-            <div class="faq-item-header" style="background:#096800;">
-              <div class="faq-title">HOW DO I JOIN?</div>
-              <button class="faq-toggle" aria-expanded="false">
-                <span class="ball" aria-hidden="true">⚽</span>
+            <!-- Row 2 -->
+            <div class="mfaq-item tone-b" data-index="1" style="top:115px; height:115px;">
+              <div class="mfaq-title">HOW DO I JOIN?</div>
+              <button class="mfaq-toggle" aria-expanded="false" style="left:246px;">
+                <span class="ball">⚽</span>
                 <span>Expand</span>
               </button>
+              <div class="mfaq-answer-row">Answer goes here.</div>
             </div>
-            <div class="faq-answer">Answer goes here.</div>
-          </div>
-          <div class="faq-item tone-a">
-            <div class="faq-item-header" style="background:#0a6f00;">
-              <div class="faq-title">WHAT’S THE LEADERBOARD?</div>
-              <button class="faq-toggle" aria-expanded="false">
-                <span class="ball" aria-hidden="true">⚽</span>
+            <!-- Row 3 -->
+            <div class="mfaq-item tone-a" data-index="2" style="top:230px; height:115px;">
+              <div class="mfaq-title">WHAT’S THE LEADERBOARD?</div>
+              <button class="mfaq-toggle" aria-expanded="false" style="left:246px;">
+                <span class="ball">⚽</span>
                 <span>Expand</span>
               </button>
+              <div class="mfaq-answer-row">Answer goes here.</div>
             </div>
-            <div class="faq-answer">Answer goes here.</div>
-          </div>
-          <div class="faq-item tone-b">
-            <div class="faq-item-header" style="background:#096800;">
-              <div class="faq-title">WHAT ARE STAKER NFTS?</div>
-              <button class="faq-toggle" aria-expanded="false">
-                <span class="ball" aria-hidden="true">⚽</span>
+            <!-- Row 4 -->
+            <div class="mfaq-item tone-b" data-index="3" style="top:345px; height:115px;">
+              <div class="mfaq-title">WHAT ARE STAKER NFTS?</div>
+              <button class="mfaq-toggle" aria-expanded="false" style="left:246px;">
+                <span class="ball">⚽</span>
                 <span>Expand</span>
               </button>
+              <div class="mfaq-answer-row">Answer goes here.</div>
             </div>
-            <div class="faq-answer">Answer goes here.</div>
-          </div>
-          <div class="faq-item tone-a">
-            <div class="faq-item-header" style="background:#0a6f00;">
-              <div class="faq-title">WHAT’S A GOLDEN STAKER NFT?</div>
-              <button class="faq-toggle" aria-expanded="false">
-                <span class="ball" aria-hidden="true">⚽</span>
+            <!-- Row 5 -->
+            <div class="mfaq-item tone-a" data-index="4" style="top:460px; height:115px;">
+              <div class="mfaq-title">WHAT’S A GOLDEN STAKER NFT?</div>
+              <button class="mfaq-toggle" aria-expanded="false" style="left:246px;">
+                <span class="ball">⚽</span>
                 <span>Expand</span>
               </button>
+              <div class="mfaq-answer-row">Answer goes here.</div>
             </div>
-            <div class="faq-answer">Answer goes here.</div>
-          </div>
-          <div class="faq-item tone-b">
-            <div class="faq-item-header" style="background:#096800;">
-              <div class="faq-title">WHAT DO VALIDATORS GET?</div>
-              <button class="faq-toggle" aria-expanded="false">
-                <span class="ball" aria-hidden="true">⚽</span>
+            <!-- Row 6 -->
+            <div class="mfaq-item tone-b" data-index="5" style="top:575px; height:115px;">
+              <div class="mfaq-title">WHAT DO VALIDATORS GET?</div>
+              <button class="mfaq-toggle" aria-expanded="false" style="left:246px;">
+                <span class="ball">⚽</span>
                 <span>Expand</span>
               </button>
+              <div class="mfaq-answer-row">Answer goes here.</div>
             </div>
-            <div class="faq-answer">Answer goes here.</div>
-          </div>
-          <div class="faq-item tone-a">
-            <div class="faq-item-header" style="border-radius:0 0 20px 20px; background:#0a6f00;">
-              <div class="faq-title">ARE REWARDS ONLY MONTHLY?</div>
-              <button class="faq-toggle" aria-expanded="false">
-                <span class="ball" aria-hidden="true">⚽</span>
-                <span>Expand</span>
-              </button>
-            </div>
-            <div class="faq-answer">Answer goes here.</div>
+            <!-- Global answer container removed for true accordion behavior -->
           </div>
         </div>
       </section>
@@ -503,28 +491,78 @@
         nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.add('hidden')));
       }
 
-      // FAQ accordion interactions (desktop + mobile)
-      document.querySelectorAll('.faq-wrap .faq-toggle, .faq-wrap-mobile .faq-toggle').forEach(toggle => {
-        toggle.addEventListener('click', () => {
-          const item = toggle.closest('.faq-item');
-          const isOpen = item.classList.contains('open');
-          // close all others within this wrapper only
-          item.parentElement.querySelectorAll('.faq-item').forEach(i => {
-            i.classList.remove('open');
-            const t = i.querySelector('.faq-toggle');
-            if (t) t.setAttribute('aria-expanded', 'false');
-            const label = i.querySelector('.faq-toggle span:last-child');
-            if (label) label.textContent = 'Expand';
+      // FAQ accordion interactions (desktop + mobile + pixel-accurate mobile)
+      (function(){
+        // Desktop + legacy mobile
+        document.querySelectorAll('.faq-wrap .faq-toggle, .faq-wrap-mobile .faq-toggle').forEach(toggle => {
+          toggle.addEventListener('click', () => {
+            const item = toggle.closest('.faq-item');
+            const isOpen = item.classList.contains('open');
+            item.parentElement.querySelectorAll('.faq-item').forEach(i => {
+              i.classList.remove('open');
+              const t = i.querySelector('.faq-toggle');
+              if (t) t.setAttribute('aria-expanded', 'false');
+              const label = i.querySelector('.faq-toggle span:last-child');
+              if (label) label.textContent = 'Expand';
+            });
+            if (!isOpen) {
+              item.classList.add('open');
+              toggle.setAttribute('aria-expanded', 'true');
+              const label = toggle.querySelector('span:last-child');
+              if (label) label.textContent = 'Close';
+            }
           });
-          // open this one (or close if it was open)
-          if (!isOpen) {
-            item.classList.add('open');
-            toggle.setAttribute('aria-expanded', 'true');
-            const label = toggle.querySelector('span:last-child');
-            if (label) label.textContent = 'Close';
-          }
         });
-      });
+
+        // Pixel-accurate mobile accordion: row expands, rows below shift down
+        const headerTops = [0, 115, 230, 345, 460, 575];
+        const baseRowHeight = 115;
+        const HEADER_OFFSET = 129; // 115px шапка + 14px зазор (даёт место между шапкой и ответом)
+
+        function layoutAccordion(openIndex) {
+          const rows = Array.from(document.querySelectorAll('.mfaq-panel .mfaq-item'));
+          let extra = 0;
+          rows.forEach((row, i) => {
+            const toggle = row.querySelector('.mfaq-toggle');
+            const label = toggle ? toggle.querySelector('span:last-child') : null;
+            const isOpen = i === openIndex;
+            if (isOpen) {
+              const answerEl = row.querySelector('.mfaq-answer-row');
+              const answerHeight = Math.min(answerEl ? answerEl.scrollHeight : 0, 320);
+              row.classList.add('open');
+              // Height = header area + header-to-answer gap (padding-top via CSS) + answer content
+              row.style.height = (baseRowHeight + HEADER_OFFSET + answerHeight) + 'px';
+              if (toggle) toggle.setAttribute('aria-expanded', 'true');
+              if (label) label.textContent = 'Close';
+              extra = HEADER_OFFSET + answerHeight; // shift next rows by the extra content opened
+            } else {
+              row.classList.remove('open');
+              row.style.height = baseRowHeight + 'px';
+              if (toggle) toggle.setAttribute('aria-expanded', 'false');
+              if (label) label.textContent = 'Expand';
+            }
+            const baseTop = headerTops[i] + (i > openIndex && openIndex !== -1 ? extra : 0);
+            row.style.top = baseTop + 'px';
+          });
+        }
+
+        // Init with first row open
+        layoutAccordion(0);
+
+        document.querySelectorAll('.mfaq-toggle').forEach((toggle, idx) => {
+          const handler = (ev) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+            const row = toggle.closest('.mfaq-item');
+            if (!row) return;
+            const index = Number(row.getAttribute('data-index')) || idx;
+            const willOpen = !row.classList.contains('open');
+            layoutAccordion(willOpen ? index : -1);
+          };
+          toggle.addEventListener('click', handler, { passive: false });
+          toggle.addEventListener('touchend', handler, { passive: false });
+        });
+      })();
     </script>
   </body>
 </html>

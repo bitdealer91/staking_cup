@@ -1,0 +1,165 @@
+/* Mobile FAQ — pixel-accurate to Figma node 6812:34246 */
+
+/* Panel container (positioned onto mobile background by existing .faq-panel top) */
+.mfaq-panel {
+  position: absolute; /* keeps existing placement via .faq-panel */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 350px;
+  height: 920px; /* 6 rows (115px) + open area */
+  border-radius: 30px;
+  background: #006200;
+  border: 1px solid #000;
+  box-shadow: 0 4px 0 #003b00;
+  overflow: hidden;
+  z-index: 100; /* ensure above background image */
+}
+
+.mfaq-panel-inner {
+  position: relative; /* children position against this */
+  width: 100%;
+  height: 100%;
+}
+
+/* FAQ rows (headers) */
+.mfaq-item {
+  position: absolute;
+  left: 0;
+  width: 350px;
+  height: 115px;
+  overflow: hidden;
+  backdrop-filter: blur(4.122px);
+  -webkit-backdrop-filter: blur(4.122px);
+  z-index: 1;
+  pointer-events: none; /* avoid swallowing taps; button re-enables */
+  transition: top 220ms cubic-bezier(.22,.61,.36,1);
+  padding-top: 0; /* will add space only when open */
+}
+
+.mfaq-item.tone-a { background: #006200; }
+.mfaq-item.tone-b { background: #007600; }
+
+/* Round first/last headers to match outer radius */
+.mfaq-item:first-child { border-top-left-radius: 30px; border-top-right-radius: 30px; }
+.mfaq-item:last-child { border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; }
+
+/* Separator lines between headers (Figma thin lines) */
+.mfaq-item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px; /* approximates 0.82px */
+  background: rgba(0,0,0,0.28);
+}
+.mfaq-item:last-child::after { display: none; }
+
+/* Initial positions are set via JS for dynamic accordion layout */
+
+/* Titles */
+.mfaq-title {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 214px; /* prevents overlap with the toggle */
+  pointer-events: none; /* let taps reach the toggle */
+  font-family: 'Soccer_League', 'Changa One', system-ui, -apple-system, sans-serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 1.2;
+  letter-spacing: 1.47px; /* 7% of 21px */
+  color: #faffc6;
+  /* Outline + subtle vertical shadow to mimic Figma stroke */
+  -webkit-text-stroke: 0.75px #000;
+  text-shadow:
+    0 1px 0 #000,
+    0 -1px 0 #000,
+    1px 0 0 #000,
+    -1px 0 0 #000,
+    0 3.297px 0 #000;
+  text-transform: none;
+  white-space: normal;
+}
+
+/* Toggle pill */
+.mfaq-toggle {
+  position: absolute;
+  left: 259px; /* Figma left for row 1 */
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 10px;
+  border-radius: 84px;
+  color: #fff;
+  font-family: 'PolySans', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.35;
+  z-index: 3;
+  cursor: pointer;
+  pointer-events: auto; /* make button interactive on touch */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.tone-a .mfaq-toggle { background: #007600; }
+.tone-b .mfaq-toggle { background: #006200; }
+
+.mfaq-toggle .ball {
+  width: 13px;
+  height: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* When open, pin the header and the toggle to the top instead of centering */
+.mfaq-item.open .mfaq-title { top: 24px; transform: none; }
+.mfaq-item.open .mfaq-toggle { top: 24px; transform: none; }
+
+/* Global answer block that repositions under the opened header */
+/* Per-row answer content to expand the item height */
+.mfaq-answer-row {
+  position: relative; /* участвует в высоте ряда */
+  margin-top: 0; /* пространство даёт padding у .mfaq-item.open */
+  margin-left: 24px; /* выравнивание по макету */
+  width: 299px;
+  color: #fff;
+  font-family: 'PolySans', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.4;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.mfaq-item.open .mfaq-answer-row {
+  opacity: 1;
+}
+
+/* когда открыт — добавляем пространство под шапкой, чтобы текст был ниже вопроса */
+.mfaq-item.open { padding-top: 129px; }
+
+/* Subtle borders around the answer area (as in Figma) */
+.mfaq-answer-global::before,
+.mfaq-answer-global::after {
+  content: "";
+  position: absolute;
+  left: -24px; /* aligns with 299px width centered inside 350px */
+  width: 350px;
+  height: 1px;
+  background: rgba(0,0,0,0.28);
+}
+.mfaq-answer-global::before { top: -6px; }
+.mfaq-answer-global::after { bottom: -6px; }
+
+/* Mobile only scope (matches existing media query breakpoints, but standalone) */
+@media (min-width: 768px) {
+  .mfaq-panel { display: none; }
+}
+
+
