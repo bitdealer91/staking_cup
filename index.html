@@ -210,13 +210,16 @@
       .btn-shine-only { position: relative; isolation: isolate; }
       .btn-shine-only::before { content: none !important; }
       .btn-shine-clip { position:absolute; inset:0; border-radius: inherit; pointer-events:none; overflow:hidden; box-sizing:border-box; z-index:1; }
-      .btn-shine-line { position:absolute; top:4px; bottom:14px; left:50%; width:48px; transform: translateX(-50%); background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0) 100%); filter: blur(0.5px); animation: shine-line 2.4s cubic-bezier(.22,.61,.36,1) infinite; }
+      .btn-shine-clip::after { content:""; position:absolute; inset:0; border-radius: inherit; pointer-events:none; background: radial-gradient(120% 140% at 50% 50%, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.05) 40%, rgba(0,0,0,0) 60%); opacity:.35; animation: btn-soft-glow var(--glow-dur, 2.6s) ease-in-out infinite; }
+      .btn-shine-line { position:absolute; top:4px; bottom:14px; left:50%; width:48px; transform: translateX(-50%); background: linear-gradient(60deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0) 60%); filter: blur(0.5px); animation: shine-line var(--shine-dur, 2.6s) cubic-bezier(.22,.61,.36,1) infinite; }
       @keyframes shine-line { 0% { transform: translateX(-50%) translateX(-120px); opacity:0; } 15% { opacity:.9; } 60% { opacity:.9; } 100% { transform: translateX(-50%) translateX(120px); opacity:0; } }
       @media (prefers-reduced-motion: reduce) {
         .btn-get-glow::before, .btn-get-glow::after,
         .btn-join-pulse::before, .btn-join-pulse::after, .btn-join-pulse img,
         .btn-attract::before, .btn-attract::after,
-        .btn-shine-only::before { animation: none; opacity: 0; }
+        .btn-shine-only::before,
+        .btn-shine-clip::after,
+        .btn-shine-line { animation: none !important; opacity: 0 !important; }
       }
 
       /* Mobile FAQ overrides */
@@ -421,7 +424,8 @@
         <div class="min-h-[720px] md:min-h-[820px]"></div>
         <!-- Get Started button (from Figma 6681:3100) -->
         <div class="btn-shadow" style="left:1048px !important; top:550px !important; z-index:20;">
-          <a href="#stake" class="btn-surface btn-get-glow">
+          <a href="#stake" class="btn-surface btn-get-glow btn-shine-only" style="--shine-dur:2.6s; --glow-dur:2.6s;">
+            <span class="btn-shine-clip"><span class="btn-shine-line"></span></span>
             <img src="./assets/get_started.png" alt="Get Started" />
           </a>
         </div>
@@ -442,7 +446,7 @@
     <!-- ============ TICKER ============ -->
     <section id="ticker" class="relative scroll-mt-24 md:h-[160px] bg-[#0f0f0f] -mt-[40px]">
       <!-- Join button placed just above the ticker -->
-      <a href="#stake" class="btn-surface btn-shine-only" style="position:absolute; left:50%; top:-40px; transform:translateX(-50%); width:352px; height:64px; display:inline-flex; align-items:center; justify-content:center; z-index:20; border-radius:98px; overflow:hidden;">
+      <a href="#stake" class="btn-surface btn-shine-only" style="--shine-dur:2.6s; --glow-dur:2.6s; position:absolute; left:50%; top:-40px; transform:translateX(-50%); width:352px; height:64px; display:inline-flex; align-items:center; justify-content:center; z-index:20; border-radius:98px; overflow:hidden;">
         <span class="btn-shine-clip"><span class="btn-shine-line"></span></span>
         <img src="./assets/join-butt.png" alt="Join the cup" style="width:352px; height:64px; object-fit:contain;" />
       </a>
