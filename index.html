@@ -102,19 +102,36 @@
         .trophy-shine { animation: none; opacity: 0; }
       }
 
-      /* Localized trophy shines (at previous burst points) */
+      /* Localized trophy shines (central refined glint) */
       .trophy-shines { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
-      .trophy-shines .shine { position: absolute; background: linear-gradient(60deg, rgba(255,255,255,0) 42%, rgba(255,255,255,0.88) 50%, rgba(255,255,255,0) 58%); mix-blend-mode: screen; transform: translateX(-120%) rotate(12deg); animation: shine-sweep 4s linear infinite alternate; filter: drop-shadow(0 0 12px rgba(255,255,255,0.35)); }
+      .trophy-shines .shine { position: absolute; background: linear-gradient(60deg, rgba(255,255,255,0) 48%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0) 52%); mix-blend-mode: screen; transform: translateX(-120%) rotate(12deg); animation: shine-sweep 4s linear infinite alternate; filter: drop-shadow(0 0 12px rgba(255,255,255,0.35)); }
       .trophy-shines .shine-left { left: 16%; top: 46%; width: 120px; height: 120px; clip-path: polygon(0% 0%, 100% 10%, 40% 100%, 0% 100%); animation-delay: 0s; }
       .trophy-shines .shine-right { left: 68%; top: 48%; width: 120px; height: 120px; clip-path: polygon(0% 10%, 100% 0%, 100% 100%, 60% 100%); animation-delay: 0.6s; }
-      .trophy-shines .shine-top { left: calc(50% - 70px); top: 16px; width: 140px; height: 140px; clip-path: polygon(20% 0%, 80% 0%, 50% 85%); animation-delay: 1.2s; }
+      /* Central glint: narrow, raised slightly, with star pulse */
+      .trophy-shines .shine-top { left: calc(50% - 0px); top: 50px; width: 90px; height: 110px; clip-path: polygon(42% 0%, 58% 0%, 50% 100%); background: none; animation: none; filter: drop-shadow(0 0 10px rgba(255,255,255,0.25)); }
+      .trophy-shines .shine-top::before { content: ""; position: absolute; left: -60%; top: -10%; width: 220%; height: 120%; background: linear-gradient(60deg, rgba(255,255,255,0) 45%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0) 55%); transform: translateX(-120%) rotate(12deg); animation: glint-sweep 3.2s cubic-bezier(.22,.61,.36,1) infinite; }
+      .trophy-shines .shine-top::after { content: ""; position: absolute; left: 50%; top: 18%; width: 22px; height: 22px; transform: translate(-50%, -50%) scale(0.6); border-radius: 9999px; background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(255,255,255,0) 60%); filter: drop-shadow(0 0 10px rgba(255,255,255,0.6)); animation: star-pulse 3.2s ease-in-out infinite; animation-delay: .4s; }
       @keyframes shine-sweep {
         0% { transform: translateX(-120%) rotate(12deg); opacity: 0; }
         10% { opacity: 1; }
         100% { transform: translateX(120%) rotate(12deg); opacity: 1; }
       }
+      @keyframes glint-sweep {
+        0% { transform: translateX(-120%) rotate(12deg); opacity: 0; }
+        15% { opacity: 1; }
+        70% { opacity: 1; }
+        100% { transform: translateX(120%) rotate(12deg); opacity: 0; }
+      }
+      @keyframes star-pulse {
+        0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+        15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        35% { opacity: .6; transform: translate(-50%, -50%) scale(0.85); }
+        60% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+      }
       @media (prefers-reduced-motion: reduce) {
         .trophy-shines .shine { animation: none; opacity: 0; }
+        .trophy-shines .shine-top::before,
+        .trophy-shines .shine-top::after { animation: none; opacity: 0; }
       }
 
       /* Hero mascot animations */
