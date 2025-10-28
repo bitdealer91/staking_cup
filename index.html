@@ -84,6 +84,53 @@
       .menu-label { font-family: 'Soccer_League', 'Changa One', system-ui, -apple-system, sans-serif; font-style: italic; font-weight: 400; font-size: 14px; line-height: 0.8; letter-spacing: 0.28px; color: #026f1a; text-transform: capitalize; text-shadow: none; white-space: nowrap; }
       .menu-link { height: 61px; display: flex; align-items: center; justify-content: center; padding: 4px 20px; }
       .menu-inner-highlight { position:absolute; inset:0; box-shadow: inset 0 2px 0.4px rgba(255,255,255,0.25); pointer-events:none; border-radius: inherit; }
+      /* Menu press state */
+      .menu-link { transition: transform 120ms cubic-bezier(.22,.61,.36,1), filter 80ms linear; }
+      .menu-link:active { transform: translateY(1px) scale(0.98); filter: brightness(0.92); }
+      /* Trophy shine overlay */
+      .trophy-wrap { position: absolute; overflow: visible; pointer-events: none; }
+      .trophy-wrap img { display: block; width: 100%; height: 100%; }
+      .trophy-shine { position: absolute; inset: -20%; background: linear-gradient(60deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 60%); transform: translateX(-120%) rotate(12deg); animation: trophy-shine 8s linear infinite; mix-blend-mode: screen; pointer-events: none; }
+      .trophy-shine-top { clip-path: polygon(0% 0%, 100% 0%, 50% 58%); }
+      .trophy-shine-bottom { clip-path: polygon(0% 58%, 100% 58%, 100% 100%, 0% 100%); }
+      @keyframes trophy-shine {
+        0% { transform: translateX(-120%) rotate(12deg); }
+        8% { transform: translateX(120%) rotate(12deg); }
+        100% { transform: translateX(120%) rotate(12deg); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .trophy-shine { animation: none; opacity: 0; }
+      }
+
+      /* Localized trophy shines (at previous burst points) */
+      .trophy-shines { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+      .trophy-shines .shine { position: absolute; background: linear-gradient(60deg, rgba(255,255,255,0) 42%, rgba(255,255,255,0.88) 50%, rgba(255,255,255,0) 58%); mix-blend-mode: screen; transform: translateX(-120%) rotate(12deg); animation: shine-sweep 4s linear infinite alternate; filter: drop-shadow(0 0 12px rgba(255,255,255,0.35)); }
+      .trophy-shines .shine-left { left: 16%; top: 46%; width: 120px; height: 120px; clip-path: polygon(0% 0%, 100% 10%, 40% 100%, 0% 100%); animation-delay: 0s; }
+      .trophy-shines .shine-right { left: 68%; top: 48%; width: 120px; height: 120px; clip-path: polygon(0% 10%, 100% 0%, 100% 100%, 60% 100%); animation-delay: 0.6s; }
+      .trophy-shines .shine-top { left: calc(50% - 70px); top: 16px; width: 140px; height: 140px; clip-path: polygon(20% 0%, 80% 0%, 50% 85%); animation-delay: 1.2s; }
+      @keyframes shine-sweep {
+        0% { transform: translateX(-120%) rotate(12deg); opacity: 0; }
+        10% { opacity: 1; }
+        100% { transform: translateX(120%) rotate(12deg); opacity: 1; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .trophy-shines .shine { animation: none; opacity: 0; }
+      }
+
+      /* Hero mascot animations */
+      .hero-mascot { position: absolute; will-change: transform; transform: translate3d(0, var(--parallax-y, 0px), 0); pointer-events: none; }
+      .hero-mascot-img { display: block; transform-origin: center bottom; animation: mascot-wiggle 2.2s ease-in-out infinite; will-change: transform; }
+      .hero-fox .hero-mascot-img { animation-delay: 0.2s; }
+      .hero-chicken .hero-mascot-img { animation-delay: 0.6s; }
+      @keyframes mascot-wiggle {
+        0% { transform: translate(0, 0) rotate(0deg); }
+        50% { transform: translate(1px, -3px) rotate(2deg); }
+        100% { transform: translate(-1px, -1px) rotate(-2deg); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .hero-mascot { transform: none; }
+        .hero-mascot-img { animation: none; }
+      }
       /* Generic blurred button container + press states */
       .btn-blur { position: relative; overflow: hidden; cursor: pointer; border-radius: 98px; background: transparent; box-shadow: 0 21px 39.3px -48px rgba(0,0,0,0.08); transition: transform 120ms ease, filter 120ms ease; }
       .btn-blur::before { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; }
@@ -269,6 +316,20 @@
           </a>
         </div>
         <div class="max-w-3xl h-full"></div>
+      </div>
+      <!-- Center hero trophy shine overlay (positioned to trophy bounds from Figma) -->
+      <div class="trophy-wrap" style="position:absolute; left:50%; top:320px; transform:translateX(-50%); width:300px; height:360px; z-index:1;">
+        <div class="trophy-shines" aria-hidden="true">
+          <span class="shine shine-top"></span>
+        </div>
+      </div>
+
+      <!-- Hero mascots (absolute overlays) -->
+      <div class="hero-mascot hero-fox" data-parallax="6" style="left:170px; top:320px; z-index:1;">
+        <img src="./assets/fox.png" alt="" class="hero-mascot-img" aria-hidden="true" />
+      </div>
+      <div class="hero-mascot hero-chicken" data-parallax="4" style="left:800px; top:300px; z-index:1;">
+        <img src="./assets/chicken.png" alt="" class="hero-mascot-img" aria-hidden="true" />
       </div>
     </section>
 
@@ -562,6 +623,37 @@
           toggle.addEventListener('click', handler, { passive: false });
           toggle.addEventListener('touchend', handler, { passive: false });
         });
+      })();
+      // Tiny scroll-based parallax for hero mascots
+      (function(){
+        const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (mql.matches) return;
+        const hero = document.getElementById('top');
+        if (!hero) return;
+        const mascots = Array.from(hero.querySelectorAll('.hero-mascot'));
+        if (!mascots.length) return;
+        let ticking = false;
+        function update() {
+          ticking = false;
+          const rect = hero.getBoundingClientRect();
+          const viewportH = window.innerHeight || document.documentElement.clientHeight;
+          const centerDelta = (rect.top + rect.height / 2) - (viewportH / 2);
+          const norm = Math.max(-1, Math.min(1, centerDelta / (viewportH / 2)));
+          mascots.forEach(el => {
+            const max = Math.max(2, Math.min(8, parseFloat(el.getAttribute('data-parallax')) || 4));
+            const offset = -norm * max;
+            el.style.setProperty('--parallax-y', offset.toFixed(2) + 'px');
+          });
+        }
+        function request() {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(update);
+          }
+        }
+        window.addEventListener('scroll', request, { passive: true });
+        window.addEventListener('resize', request);
+        request();
       })();
     </script>
   </body>
