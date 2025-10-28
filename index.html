@@ -205,10 +205,18 @@
       @keyframes attract-glow { 0%, 100% { opacity: .25; } 50% { opacity: .6; } }
       .btn-attract::before { content:""; position:absolute; top:-25%; left:-35%; width:170%; height:170%; border-radius: 22%; pointer-events:none; z-index:1; background: linear-gradient(60deg, rgba(255,255,255,0) 46%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0) 54%); transform: translateX(-130%) rotate(10deg); animation: attract-shimmer 2.8s cubic-bezier(.22,.61,.36,1) infinite; mix-blend-mode: screen; }
       @keyframes attract-shimmer { 0% { transform: translateX(-130%) rotate(10deg); opacity: 0; } 20% { opacity: .9; } 65% { opacity: .9; } 100% { transform: translateX(130%) rotate(10deg); opacity: 0; } }
+      
+      /* Shimmer-only effect (unified shine without glow) */
+      .btn-shine-only { position: relative; isolation: isolate; }
+      .btn-shine-only::before { content: none !important; }
+      .btn-shine-clip { position:absolute; inset:0; border-radius: inherit; pointer-events:none; overflow:hidden; box-sizing:border-box; z-index:1; }
+      .btn-shine-line { position:absolute; top:4px; bottom:14px; left:50%; width:48px; transform: translateX(-50%); background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0) 100%); filter: blur(0.5px); animation: shine-line 2.4s cubic-bezier(.22,.61,.36,1) infinite; }
+      @keyframes shine-line { 0% { transform: translateX(-50%) translateX(-120px); opacity:0; } 15% { opacity:.9; } 60% { opacity:.9; } 100% { transform: translateX(-50%) translateX(120px); opacity:0; } }
       @media (prefers-reduced-motion: reduce) {
         .btn-get-glow::before, .btn-get-glow::after,
         .btn-join-pulse::before, .btn-join-pulse::after, .btn-join-pulse img,
-        .btn-attract::before, .btn-attract::after { animation: none; opacity: 0; }
+        .btn-attract::before, .btn-attract::after,
+        .btn-shine-only::before { animation: none; opacity: 0; }
       }
 
       /* Mobile FAQ overrides */
@@ -434,7 +442,8 @@
     <!-- ============ TICKER ============ -->
     <section id="ticker" class="relative scroll-mt-24 md:h-[160px] bg-[#0f0f0f] -mt-[40px]">
       <!-- Join button placed just above the ticker -->
-      <a href="#stake" class="btn-surface btn-join-pulse" style="position:absolute; left:50%; top:-40px; transform:translateX(-50%); width:352px; height:64px; display:inline-flex; align-items:center; justify-content:center; z-index:20; border-radius:98px; overflow:hidden;">
+      <a href="#stake" class="btn-surface btn-shine-only" style="position:absolute; left:50%; top:-40px; transform:translateX(-50%); width:352px; height:64px; display:inline-flex; align-items:center; justify-content:center; z-index:20; border-radius:98px; overflow:hidden;">
+        <span class="btn-shine-clip"><span class="btn-shine-line"></span></span>
         <img src="./assets/join-butt.png" alt="Join the cup" style="width:352px; height:64px; object-fit:contain;" />
       </a>
       <div class="ticker-mask">
