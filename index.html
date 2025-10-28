@@ -148,6 +148,9 @@
         .hero-mascot { transform: none; }
         .hero-mascot-img { animation: none; }
       }
+      /* Disable mascot animations for specific mascots */
+      .hero-fox, .hero-chicken { transform: none; }
+      .hero-fox .hero-mascot-img, .hero-chicken .hero-mascot-img { animation: none; }
       /* Generic blurred button container + press states */
       .btn-blur { position: relative; overflow: hidden; cursor: pointer; border-radius: 98px; background: transparent; box-shadow: 0 21px 39.3px -48px rgba(0,0,0,0.08); transition: transform 120ms ease, filter 120ms ease; }
       .btn-blur::before { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; }
@@ -158,9 +161,56 @@
       /* Figma-correct shadow without clipping */
       .btn-shadow { position: absolute; width: 205px; height: 64px; border-radius: 98px; box-shadow: 0 21px 64px -48px rgba(0,0,0,0.33); }
       .btn-surface { display: inline-flex; align-items: center; justify-content: center; width: 100%; height: 100%; border-radius: inherit; overflow: hidden; cursor: pointer; text-decoration: none; will-change: transform, filter; transition: transform 120ms cubic-bezier(.22,.61,.36,1), filter 80ms linear; }
-      .btn-surface:hover { transform: translateY(-2px) scale(1.02); }
-      .btn-surface:active { transform: translateY(2px) scale(0.975); filter: brightness(0.9); }
+      /* Support a base transform via CSS vars to allow per-button scaling without breaking hover/active */
+      .btn-surface { --base-translateY: 0px; --base-scale: 1; transform: translateY(var(--base-translateY)) scale(var(--base-scale)); }
+      .btn-surface:hover { transform: translateY(calc(var(--base-translateY) - 2px)) scale(calc(var(--base-scale) * 1.02)); }
+      .btn-surface:active { transform: translateY(calc(var(--base-translateY) + 2px)) scale(calc(var(--base-scale) * 0.975)); filter: brightness(0.9); }
       .btn-surface img { width: 100%; height: 100%; display: block; border-radius: inherit; }
+      /* Utility: let button size to its intrinsic image size */
+      .btn-auto { width: auto !important; height: auto !important; display: inline-flex; }
+      /* Button effects: get_started glow, join pulse, joini-butt2 press-in */
+      .btn-get-glow { position: relative; isolation: isolate; }
+      /* Neutral aura + shimmer line (no color shift) */
+      .btn-get-glow::after { content:""; position:absolute; inset:0; border-radius: inherit; pointer-events:none; z-index:1; background:
+        radial-gradient(120% 140% at 50% 50%, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.06) 40%, rgba(0,0,0,0) 55%);
+        filter: blur(10px);
+        opacity: .55;
+        animation: btn-glow 3s ease-in-out infinite;
+        mix-blend-mode: screen;
+      }
+      .btn-get-glow::before { content:""; position:absolute; top:-20%; left:-30%; width: 160%; height: 160%; border-radius: 20%; pointer-events:none; z-index:2; background: linear-gradient(60deg, rgba(255,255,255,0) 45%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0) 55%); transform: translateX(-120%) rotate(12deg); animation: btn-shimmer 2.6s cubic-bezier(.22,.61,.36,1) infinite; mix-blend-mode: screen; }
+      @keyframes btn-glow { 0%,100% { opacity: .55; } 50% { opacity: .9; } }
+      @keyframes btn-shimmer { 0% { transform: translateX(-120%) rotate(12deg); opacity: 0; } 15% { opacity: .9; } 60% { opacity: .9; } 100% { transform: translateX(120%) rotate(12deg); opacity: 0; } }
+
+      .btn-join-pulse { position: relative; isolation: isolate; animation: btn-pulse 2s ease-in-out infinite; }
+      /* Do NOT animate transform on the anchor to preserve translateX(-50%) centering */
+      @keyframes btn-pulse { 0%, 100% { filter: brightness(1) saturate(1); } 50% { filter: brightness(1.18) saturate(1.18); } }
+      .btn-join-pulse::after { content:""; position:absolute; inset:0; border-radius: inherit; pointer-events:none; z-index:0; box-shadow: 0 0 42px rgba(255,255,255,0.35), 0 0 90px rgba(0,221,255,0.45); opacity: .55; animation: btn-pulse-glow 2s ease-in-out infinite; }
+      @keyframes btn-pulse-glow { 0%, 100% { opacity: .40; } 50% { opacity: .95; } }
+      .btn-join-pulse::before { content:""; position:absolute; left:50%; top:50%; width: 120%; height: 120%; transform: translate(-50%, -50%); border-radius: inherit; pointer-events:none; z-index:-1; border: 3px solid rgba(0,221,255,0.6); opacity: .9; animation: btn-ring 2s ease-out infinite; filter: blur(1.5px); }
+      @keyframes btn-ring { 0% { opacity:.9; transform: translate(-50%, -50%) scale(0.85); } 100% { opacity:0; transform: translate(-50%, -50%) scale(1.4); } }
+      /* Subtle image scale to amplify pulse while keeping anchor centered */
+      .btn-join-pulse img { transform-origin: center center; animation: btn-pulse-img 2s ease-in-out infinite; }
+      @keyframes btn-pulse-img { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+
+      .btn-press-in { position: relative; transition: transform 160ms cubic-bezier(.22,.61,.36,1), filter 160ms linear, box-shadow 160ms ease; box-shadow: 0 14px 40px -20px rgba(0,0,0,.45); }
+      .btn-press-in::before { content:""; position:absolute; inset:0; border-radius: inherit; pointer-events:none; background: linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0) 40%); mix-blend-mode: screen; }
+      .btn-press-in:hover { transform: translateY(-2px); box-shadow: 0 24px 60px -24px rgba(0,0,0,.55); }
+      .btn-press-in:active { transform: translateY(2px) scale(0.985); filter: brightness(0.96) contrast(1.06); box-shadow: 0 6px 18px -10px rgba(0,0,0,.55), inset 0 10px 28px rgba(0,0,0,0.35); }
+      .btn-press-in:active::after { content:""; position:absolute; inset:0; border-radius: inherit; pointer-events:none; box-shadow: inset 0 10px 28px rgba(0,0,0,0.35); }
+
+      /* Attention effect for joini-butt2 */
+      .btn-attract { position: relative; isolation: isolate; }
+      .btn-attract::after { content:""; position:absolute; inset:0; border-radius: inherit; pointer-events:none; z-index:0; box-shadow: 0 0 22px rgba(255,255,255,0.18), 0 0 48px rgba(255, 200, 0, 0.25); opacity: .35; animation: attract-glow 2.6s ease-in-out infinite; }
+      @keyframes attract-glow { 0%, 100% { opacity: .25; } 50% { opacity: .6; } }
+      .btn-attract::before { content:""; position:absolute; top:-25%; left:-35%; width:170%; height:170%; border-radius: 22%; pointer-events:none; z-index:1; background: linear-gradient(60deg, rgba(255,255,255,0) 46%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0) 54%); transform: translateX(-130%) rotate(10deg); animation: attract-shimmer 2.8s cubic-bezier(.22,.61,.36,1) infinite; mix-blend-mode: screen; }
+      @keyframes attract-shimmer { 0% { transform: translateX(-130%) rotate(10deg); opacity: 0; } 20% { opacity: .9; } 65% { opacity: .9; } 100% { transform: translateX(130%) rotate(10deg); opacity: 0; } }
+      @media (prefers-reduced-motion: reduce) {
+        .btn-get-glow::before, .btn-get-glow::after,
+        .btn-join-pulse::before, .btn-join-pulse::after, .btn-join-pulse img,
+        .btn-attract::before, .btn-attract::after { animation: none; opacity: 0; }
+      }
+
       /* Mobile FAQ overrides */
       @media (max-width: 767px) {
         .faq-mobile-bg { background-size: cover; background-position: center; }
@@ -234,7 +284,7 @@
       <!-- Why join with overlaid join button at the seam -->
       <section id="m-why" class="relative">
         <img src="./assets/mobile/why_join_section.png" alt="Why join section" class="block w-full h-auto select-none" />
-        <a href="#stake" class="absolute left-1/2 -translate-x-1/2 bottom-[-24px] inline-block z-10" aria-label="Join">
+        <a href="#stake" class="absolute left-1/2 -translate-x-1/2 bottom-[-24px] inline-block z-10 btn-press-in btn-attract" aria-label="Join">
           <img src="./assets/mobile/joini-butt2.png" alt="Join" class="w-[320px] h-auto" />
         </a>
       </section>
@@ -327,8 +377,8 @@
           <a href="#faq" class="menu-link" style="width:63px;"><div class="menu-label">FAQ</div></a>
           <div class="menu-inner-highlight"></div>
         </div>
-        <div class="btn-shadow" style="left:548px; top:900px !important; width:343px; height:60px; border-radius:98px; box-shadow: 0 21px 64px -48px rgba(0,0,0,0.33); z-index:10;">
-          <a href="#stake" class="btn-surface" style="width:343px; height:60px;">
+        <div class="btn-shadow" style="left:50%; top:900px !important; transform:translateX(-50%); border-radius:98px; box-shadow: 0 21px 64px -48px rgba(0,0,0,0.33); z-index:10;">
+          <a href="#stake" class="btn-surface btn-attract btn-press-in btn-auto" style="--base-scale:1.24;">
             <img src="./assets/joini-butt.png" alt="Join" />
           </a>
         </div>
@@ -363,7 +413,7 @@
         <div class="min-h-[720px] md:min-h-[820px]"></div>
         <!-- Get Started button (from Figma 6681:3100) -->
         <div class="btn-shadow" style="left:1048px !important; top:550px !important; z-index:20;">
-          <a href="#stake" class="btn-surface">
+          <a href="#stake" class="btn-surface btn-get-glow">
             <img src="./assets/get_started.png" alt="Get Started" />
           </a>
         </div>
@@ -384,7 +434,7 @@
     <!-- ============ TICKER ============ -->
     <section id="ticker" class="relative scroll-mt-24 md:h-[160px] bg-[#0f0f0f] -mt-[40px]">
       <!-- Join button placed just above the ticker -->
-      <a href="#stake" class="btn-surface" style="position:absolute; left:50%; top:-40px; transform:translateX(-50%); width:352px; height:64px; display:inline-flex; align-items:center; justify-content:center; z-index:20; border-radius:98px; overflow:hidden;">
+      <a href="#stake" class="btn-surface btn-join-pulse" style="position:absolute; left:50%; top:-40px; transform:translateX(-50%); width:352px; height:64px; display:inline-flex; align-items:center; justify-content:center; z-index:20; border-radius:98px; overflow:hidden;">
         <img src="./assets/join-butt.png" alt="Join the cup" style="width:352px; height:64px; object-fit:contain;" />
       </a>
       <div class="ticker-mask">
@@ -430,7 +480,7 @@
     <section id="why" class="relative scroll-mt-24 md:h-[1244px]">
       <div class="absolute inset-0 -z-10 bg-center bg-cover" style="background-image:url('./assets/why-bg.png')"></div>
       <!-- Join button 2 (from Figma 6681:26529) -->
-      <a href="#stake" class="btn-surface" style="position:absolute; left:50%; top:1091px; transform:translateX(-50%); width:352px; height:64px; display:inline-flex; align-items:center; justify-content:center; z-index:20; border-radius:98px; overflow:hidden;">
+      <a href="#stake" class="btn-surface btn-press-in btn-attract" style="position:absolute; left:50%; top:1091px; transform:translateX(-50%); width:352px; height:64px; display:inline-flex; align-items:center; justify-content:center; z-index:20; border-radius:98px; overflow:hidden;">
         <img src="./assets/joini-butt2.png" alt="Join" style="width:352px; height:64px; object-fit:contain;" />
       </a>
       <div class="mx-auto max-w-6xl px-4 py-12 md:py-0 h-full flex items-center">
