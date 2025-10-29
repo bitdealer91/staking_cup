@@ -135,15 +135,7 @@
       }
 
       /* Hero mascot animations */
-      .hero-mascot { position: absolute; will-change: transform; transform: translate3d(0, var(--parallax-y, 0px), 0); pointer-events: none; }
-      .hero-mascot-img { display: block; transform-origin: center bottom; animation: mascot-wiggle 2.2s ease-in-out infinite; will-change: transform; }
-      .hero-fox .hero-mascot-img { animation-delay: 0.2s; }
-      .hero-chicken .hero-mascot-img { animation-delay: 0.6s; }
-      @keyframes mascot-wiggle {
-        0% { transform: translate(0, 0) rotate(0deg); }
-        50% { transform: translate(1px, -3px) rotate(2deg); }
-        100% { transform: translate(-1px, -1px) rotate(-2deg); }
-      }
+      
       @media (prefers-reduced-motion: reduce) {
         .hero-mascot { transform: none; }
         .hero-mascot-img { animation: none; }
@@ -402,13 +394,7 @@
         </div>
       </div>
 
-      <!-- Hero mascots (absolute overlays) -->
-      <div class="hero-mascot hero-fox" data-parallax="6" style="left:170px; top:320px; z-index:1;">
-        <img src="./assets/fox.png" alt="" class="hero-mascot-img" aria-hidden="true" />
-      </div>
-      <div class="hero-mascot hero-chicken" data-parallax="4" style="left:800px; top:300px; z-index:1;">
-        <img src="./assets/chicken.png" alt="" class="hero-mascot-img" aria-hidden="true" />
-      </div>
+      
     </section>
 
     <!-- Helper: applies offset for sticky header -->
@@ -704,37 +690,7 @@
           toggle.addEventListener('touchend', handler, { passive: false });
         });
       })();
-      // Tiny scroll-based parallax for hero mascots
-      (function(){
-        const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
-        if (mql.matches) return;
-        const hero = document.getElementById('top');
-        if (!hero) return;
-        const mascots = Array.from(hero.querySelectorAll('.hero-mascot'));
-        if (!mascots.length) return;
-        let ticking = false;
-        function update() {
-          ticking = false;
-          const rect = hero.getBoundingClientRect();
-          const viewportH = window.innerHeight || document.documentElement.clientHeight;
-          const centerDelta = (rect.top + rect.height / 2) - (viewportH / 2);
-          const norm = Math.max(-1, Math.min(1, centerDelta / (viewportH / 2)));
-          mascots.forEach(el => {
-            const max = Math.max(2, Math.min(8, parseFloat(el.getAttribute('data-parallax')) || 4));
-            const offset = -norm * max;
-            el.style.setProperty('--parallax-y', offset.toFixed(2) + 'px');
-          });
-        }
-        function request() {
-          if (!ticking) {
-            ticking = true;
-            requestAnimationFrame(update);
-          }
-        }
-        window.addEventListener('scroll', request, { passive: true });
-        window.addEventListener('resize', request);
-        request();
-      })();
+      
     </script>
   </body>
 </html>
