@@ -62,6 +62,22 @@
         .ticker-gap { width: 24px; flex-basis: 24px; }
       }
 
+      /* Mobile overlay menu */
+      .mnav { position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; }
+      .mnav-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(12px); }
+      .mnav-panel { position: relative; width: 402px; height: 567px; border-radius: 30px; background: #E6FFD3; border: 1px solid #000; box-shadow: 0 20px 60px rgba(0,0,0,0.45); padding: 30px 12px 12px; }
+      .mnav-logo { display:block; width: 98px; height: 87px; margin: 0 auto; }
+      .mnav-title { display:none; }
+      .mnav-links { width: 274px; margin: 20px auto 0 auto; display: flex; flex-direction: column; gap: 2px; }
+      .mnav-link { display:block; height: 50px; line-height: 50px; text-align:center; color:#026f1a; text-decoration:none; font-family: 'Soccer_League', 'Changa One', system-ui, -apple-system, sans-serif; font-style: italic; font-weight: 400; font-size: 19px; letter-spacing: 1.2px; text-transform: uppercase; }
+      .mnav-close { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); width: 61px; height: 61px; border-radius: 9999px; display:flex; align-items:center; justify-content:center; color:#fff; font-size: 28px; line-height: 1; background: #006200; border: 1px solid #000; box-shadow: 0 4px 0 #003b00; }
+      .mnav-link:active { transform: translateY(1px); filter: brightness(0.95); }
+      .mnav-footer { display:flex; justify-content:center; padding-top: 10px; }
+      .mnav-enter { opacity: 0; transform: scale(0.98); }
+      .mnav-enter-active { opacity: 1; transform: scale(1); transition: opacity 160ms ease, transform 160ms ease; }
+      .mnav-exit { opacity: 1; transform: scale(1); }
+      .mnav-exit-active { opacity: 0; transform: scale(0.98); transition: opacity 140ms ease, transform 140ms ease; }
+
       /* FAQ styles */
       .faq-wrap { position: absolute; left: calc(50% + 189px); top: 50%; transform: translate(-50%, -50%); border-radius: 45px; background: #006200; border: 1px solid #000; overflow: hidden; width: 884px; height: 920px; }
       .faq-item { position: relative; display: block; padding: 0; }
@@ -238,6 +254,22 @@
   <body class="bg-[#0d1f10] text-white">
     <!-- ============ MOBILE VERSION (images stacked in design order) ============ -->
     <div class="md:hidden">
+      <!-- Mobile Overlay Menu (hidden by default) -->
+      <div id="mobileNav" class="mnav hidden">
+        <div class="mnav-backdrop" id="mobileNavBackdrop"></div>
+        <div class="mnav-panel mnav-enter mnav-enter-active">
+          <img src="./assets/cup_mobile.png" alt="Somnia Staking Cup" class="mnav-logo" />
+          <nav class="mnav-links">
+            <a class="mnav-link" href="#what-is">About</a>
+            <a class="mnav-link" href="#stake">Stake Your SOMI</a>
+            <a class="mnav-link" href="#how">How the Cup Works</a>
+            <a class="mnav-link" href="#rewards">Rewards</a>
+            <a class="mnav-link" href="#why">Why Join the Cup</a>
+            <a class="mnav-link" href="#faq">FAQ</a>
+          </nav>
+          <button id="closeMobileNav" class="mnav-close" aria-label="Close menu">✕</button>
+        </div>
+      </div>
       <!-- Mobile Hero with pixel positioned overlays -->
       <section id="m-hero" class="relative">
         <img src="./assets/mobile/Hero_section.png" alt="Hero section" class="block w-full h-auto select-none" />
@@ -612,10 +644,17 @@
     <script>
       const btn = document.getElementById('menuBtn');
       const nav = document.getElementById('mobileNav');
+      const navBackdrop = document.getElementById('mobileNavBackdrop');
+      const closeBtn = document.getElementById('closeMobileNav');
+      function setBodyScroll(lock) { document.documentElement.style.overflow = lock ? 'hidden' : ''; document.body.style.overflow = lock ? 'hidden' : ''; }
+      function openNav() { if (!nav) return; nav.classList.remove('hidden'); setBodyScroll(true); }
+      function closeNav() { if (!nav) return; nav.classList.add('hidden'); setBodyScroll(false); }
       if (btn && nav) {
-        btn.addEventListener('click', () => nav.classList.toggle('hidden'));
+        btn.addEventListener('click', () => { if (nav.classList.contains('hidden')) openNav(); else closeNav(); });
+        if (closeBtn) closeBtn.addEventListener('click', closeNav);
+        if (navBackdrop) navBackdrop.addEventListener('click', closeNav);
         // Close mobile nav when clicking a link
-        nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.add('hidden')));
+        nav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
       }
 
       // FAQ accordion interactions (desktop + mobile + pixel-accurate mobile)
