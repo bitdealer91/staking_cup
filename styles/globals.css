@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, :root {
+  height: 100%;
+}
+
+/* Custom fonts from assets */
+@font-face {
+  font-family: 'Soccer League';
+  src: url('/assets/fonts/SoccerLeague.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Soccer League';
+  src: url('/assets/fonts/SoccerLeague-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'The Led Display St';
+  src: url('/assets/fonts/TheLedDisplaySt.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  @apply bg-pitch text-white font-inter;
+  background-image: 
+    linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.25)),
+    repeating-linear-gradient(
+      to right,
+      rgba(255,255,255,0.05) 0,
+      rgba(255,255,255,0.05) 4px,
+      transparent 4px,
+      transparent 200px
+    );
+  background-size: auto, 200px 100%;
+}
+
+@font-face {
+  font-family: 'The Led Display St';
+  src: url('/assets/fonts/TheLedDisplaySt.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.leaderboard-card {
+  @apply rounded-leaderboard shadow-leaderboard;
+  background: linear-gradient(90deg, #dbfcd7 0%, #dbfcd7 100%), linear-gradient(90deg, #4fc841 0%, #4fc841 100%);
+  backdrop-filter: blur(20.55px);
+}
+
+.pill {
+  @apply rounded-full px-4 py-3 flex items-center gap-2 text-sm font-medium;
+}
+
+.row-up {
+  animation: rowUp 800ms ease;
+}
+.row-down {
+  animation: rowDown 800ms ease;
+}
+
+.animate-rankUp { animation: rowUp 800ms ease; }
+.animate-rankDown { animation: rowDown 800ms ease; }
+
+@keyframes rowUp {
+  0% { background-color: rgba(52, 211, 153, 0.25); }
+  100% { background-color: transparent; }
+}
+@keyframes rowDown {
+  0% { background-color: rgba(248, 113, 113, 0.25); }
+  100% { background-color: transparent; }
+}
+
+/* Brief yellow pulse highlight (see-your-position) */
+.self-highlight { animation: selfPulse 1000ms ease; }
+@keyframes selfPulse {
+  0% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.8); }
+  100% { box-shadow: 0 0 0 12px rgba(234, 179, 8, 0); }
+}
+
+.outlined-title {
+  -webkit-text-stroke: 4px rgba(0,0,0,0.85);
+  text-shadow: 0 4px 0 rgba(0,0,0,0.85);
+}
+
