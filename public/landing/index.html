@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Somnia Staking Cup — Landing</title>
+    <meta name="description" content="Somnia Staking Cup landing page" />
+    <!-- Page favicon/logo: replace href with your logo URL -->
+    <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
+    <!-- Tailwind via CDN (good for a quick start). For production, consider a proper Tailwind build. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Changa+One:ital@1&display=swap" rel="stylesheet">
+    <style>
+      @font-face {
+        font-family: 'The Led Display St';
+        src: url('./assets/fonts/TheLedDisplaySt.woff2') format('woff2');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Soccer_League';
+        src: url('./assets/fonts/SoccerLeague.woff2') format('woff2');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Soccer_League';
+        src: url('./assets/fonts/SoccerLeague-Italic.woff2') format('woff2');
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+      }
+      html, body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+
+      /* Ticker marquee */
+      .ticker-mask { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+      .ticker-row { position: absolute; left: 0; top: 50%; display: flex; width: max-content; }
+      .ticker-row-1 { animation: marquee-left 32s linear infinite; }
+      .ticker-content { display: flex; gap: 79px; padding-right: 79px; white-space: nowrap; text-transform: uppercase; mix-blend-mode: difference; word-spacing: 79px; font-family: "The Led Display St", "DotGothic16", Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+      .ticker-gap { display: inline-block; width: 79px; flex: 0 0 79px; }
+      .ticker-blue { color: #00ddff; }
+      .ticker-red { color: #ff124d; }
+
+      @keyframes marquee-left {
+        from { transform: translateY(-50%) translateX(0); }
+        to { transform: translateY(-50%) translateX(-50%); }
+      }
+
+      /* Responsive spacing only */
+      @media (max-width: 767px) {
+        .ticker-content { gap: 40px; padding-right: 40px; word-spacing: 40px; }
+        .ticker-gap { width: 40px; flex-basis: 40px; }
+      }
+      @media (max-width: 450px) {
+        .ticker-content { gap: 24px; padding-right: 24px; word-spacing: 24px; }
+        .ticker-gap { width: 24px; flex-basis: 24px; }
+      }
+
+      /* Mobile overlay menu */
+      .mnav { position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; }
+      .mnav-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(12px); }
+      .mnav-panel { position: relative; width: 402px; height: 567px; border-radius: 30px; background: #E6FFD3; border: 1px solid #000; box-shadow: 0 20px 60px rgba(0,0,0,0.45); padding: 30px 12px 12px; }
+      .mnav-logo { display:block; width: 98px; height: 87px; margin: 0 auto; }
+      .mnav-title { display:none; }
+      .mnav-links { width: 274px; margin: 20px auto 0 auto; display: flex; flex-direction: column; gap: 2px; }
+      .mnav-link { display:block; height: 50px; line-height: 50px; text-align:center; color:#026f1a; text-decoration:none; font-family: 'Soccer_League', 'Changa One', system-ui, -apple-system, sans-serif; font-style: italic; font-weight: 400; font-size: 19px; letter-spacing: 1.2px; text-transform: uppercase; }
+      .mnav-close { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); width: 61px; height: 61px; border-radius: 9999px; display:flex; align-items:center; justify-content:center; color:#fff; font-size: 28px; line-height: 1; background: #006200; border: 1px solid #000; box-shadow: 0 4px 0 #003b00; }
+      .mnav-link:active { transform: translateY(1px); filter: brightness(0.95); }
+      .mnav-footer { display:flex; justify-content:center; padding-top: 10px; }
+      .mnav-enter { opacity: 0; transform: scale(0.98); }
+      .mnav-enter-active { opacity: 1; transform: scale(1); transition: opacity 160ms ease, transform 160ms ease; }
+      .mnav-exit { opacity: 1; transform: scale(1); }
+      .mnav-exit-active { opacity: 0; transform: scale(0.98); transition: opacity 140ms ease, transform 140ms ease; }
+
+      /* FAQ styles */
+      .faq-wrap { position: absolute; left: calc(50% + 189px); top: 50%; transform: translate(-50%, -50%); border-radius: 45px; background: #006200; border: 1px solid #000; overflow: hidden; width: 884px; height: 920px; }
+      .faq-item { position: relative; display: block; padding: 0; }
+      .faq-item-header { height: 115px; display: flex; align-items: center; padding: 0 24px 0 70px; backdrop-filter: blur(4px); width: 884px; margin: 0 auto; }
+      .faq-item + .faq-item .faq-item-header { box-shadow: inset 0 1px 0 0 rgba(0,0,0,0.2); }
+      .faq-title { font-family: 'Soccer League', 'Soccer_League', 'Changa One', system-ui, -apple-system, sans-serif; font-weight: 400; font-style: italic; font-size: 31px; line-height: 120%; letter-spacing: 7%; color: #faffc6; text-shadow: 0 3px 0 #000; text-transform: none; }
+      .faq-toggle { margin-left: auto; display: inline-flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 84px; color: #fff; }
+      .faq-toggle .ball { width: 17px; height: 17px; display: inline-flex; align-items: center; justify-content: center; }
+      .faq-answer { max-height: 0; overflow: hidden; opacity: 0; padding: 0 24px 0 0; margin-left: 94px; max-width: 507px; color: #fff; line-height: 1.4; font-family: 'PolySans', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; font-size: 21px; transition: max-height 300ms ease, opacity 300ms ease, padding 300ms ease; position: relative; }
+      .faq-item.open .faq-answer { max-height: 320px; opacity: 1; padding: 16px 24px 24px 0; }
+      .faq-item.tone-a .faq-item-header { background: #006200; }
+      .faq-item.tone-b .faq-item-header { background: #007600; }
+      .faq-item.tone-a .faq-toggle { background: #007600; }
+      .faq-item.tone-b .faq-toggle { background: #006200; }
+      .faq-chicken { position: absolute; right: 95px; top: 79px; width: 189px; height: 189px; display: none; pointer-events: none; }
+      .faq-item.open .faq-chicken { display: block; }
+
+      /* Menu (hero) pixel-perfect styles */
+      .menu-wrap { position: absolute; left: 50%; top: 24px; transform: translateX(-50%); width: 759px; height: 61px; border-radius: 59px; filter: blur(0); backdrop-filter: blur(21.05px); box-shadow: 0 5px 20.9px rgba(0,0,0,0.25); padding-left: 55px; padding-right: 13px; display: inline-flex; align-items: center; justify-content: flex-start; background-image: linear-gradient(90deg,#e6ffd3 0%,#e6ffd3 100%), linear-gradient(90deg,#ffc9e6 0%,#ffc9e6 100%), linear-gradient(90deg,#c1cdff 0%,#c1cdff 100%); }
+      .menu-label { font-family: 'Soccer_League', 'Changa One', system-ui, -apple-system, sans-serif; font-style: italic; font-weight: 400; font-size: 14px; line-height: 0.8; letter-spacing: 0.28px; color: #026f1a; text-transform: capitalize; text-shadow: none; white-space: nowrap; }
+      .menu-link { height: 61px; display: flex; align-items: center; justify-content: center; padding: 4px 20px; }
+      .menu-inner-highlight { position:absolute; inset:0; box-shadow: inset 0 2px 0.4px rgba(255,255,255,0.25); pointer-events:none; border-radius: inherit; }
+      /* Menu press state */
+      .menu-link { transition: transform 120ms cubic-bezier(.22,.61,.36,1), filter 80ms linear; }
+      .menu-link:active { transform: translateY(1px) scale(0.98); filter: brightness(0.92); }
+      /* Trophy shine overlay */
+      .trophy-wrap { position: absolute; overflow: visible; pointer-events: none; }
+      .trophy-wrap img { display: block; width: 100%; height: 100%; }
+      .trophy-shine { position: absolute; inset: -20%; background: linear-gradient(60deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 60%); transform: translateX(-120%) rotate(12deg); animation: trophy-shine 8s linear infinite; mix-blend-mode: screen; pointer-events: none; }
+      .trophy-shine-top { clip-path: polygon(0% 0%, 100% 0%, 50% 58%); }
+      .trophy-shine-bottom { clip-path: polygon(0% 58%, 100% 58%, 100% 100%, 0% 100%); }
+      @keyframes trophy-shine {
+        0% { transform: translateX(-120%) rotate(12deg); }
+        8% { transform: translateX(120%) rotate(12deg); }
+        100% { transform: translateX(120%) rotate(12deg); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .trophy-shine { animation: none; opacity: 0; }
+      }
+
+      /* Localized trophy shines (central refined glint) */
+      .trophy-shines { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+      .trophy-shines .shine { position: absolute; background: linear-gradient(60deg, rgba(255,255,255,0) 48%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0) 52%); mix-blend-mode: screen; transform: translateX(-120%) rotate(12deg); animation: shine-sweep 4s linear infinite alternate; filter: drop-shadow(0 0 12px rgba(255,255,255,0.35)); }
+      .trophy-shines .shine-left { left: 16%; top: 46%; width: 120px; height: 120px; clip-path: polygon(0% 0%, 100% 10%, 40% 100%, 0% 100%); animation-delay: 0s; }
+      .trophy-shines .shine-right { left: 68%; top: 48%; width: 120px; height: 120px; clip-path: polygon(0% 10%, 100% 0%, 100% 100%, 60% 100%); animation-delay: 0.6s; }
+      /* Central glint: narrow, raised slightly, with star pulse */
+      .trophy-shines .shine-top { left: calc(50% - 0px); top: 50px; width: 90px; height: 110px; clip-path: polygon(42% 0%, 58% 0%, 50% 100%); background: none; animation: none; filter: drop-shadow(0 0 10px rgba(255,255,255,0.25)); }
+      .trophy-shines .shine-top::before { content: ""; position: absolute; left: -60%; top: -10%; width: 220%; height: 120%; background: linear-gradient(60deg, rgba(255,255,255,0) 45%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0) 55%); transform: translateX(-120%) rotate(12deg); animation: glint-sweep 3.2s cubic-bezier(.22,.61,.36,1) infinite; }
+      .trophy-shines .shine-top::after { content: ""; position: absolute; left: 50%; top: 18%; width: 22px; height: 22px; transform: translate(-50%, -50%) scale(0.6); border-radius: 9999px; background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(255,255,255,0) 60%); filter: drop-shadow(0 0 10px rgba(255,255,255,0.6)); animation: star-pulse 3.2s ease-in-out infinite; animation-delay: .4s; }
+      @keyframes shine-sweep {
+        0% { transform: translateX(-120%) rotate(12deg); opacity: 0; }
+        10% { opacity: 1; }
+        100% { transform: translateX(120%) rotate(12deg); opacity: 1; }
+      }
+      @keyframes glint-sweep {
+        0% { transform: translateX(-120%) rotate(12deg); opacity: 0; }
+        15% { opacity: 1; }
+        70% { opacity: 1; }
+        100% { transform: translateX(120%) rotate(12deg); opacity: 0; }
+      }
+      @keyframes star-pulse {
+        0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+        15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        35% { opacity: .6; transform: translate(-50%, -50%) scale(0.85); }
+        60% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .trophy-shines .shine { animation: none; opacity: 0; }
+        .trophy-shines .shine-top::before,
+        .trophy-shines .shine-top::after { animation: none; opacity: 0; }
+      }
+
+      /* Hero mascot animations */
+      
+      @media (prefers-reduced-motion: reduce) {
+        .hero-mascot { transform: none; }
+        .hero-mascot-img { animation: none; }
+      }
+      /* Disable mascot animations for specific mascots */
+      .hero-fox, .hero-chicken { transform: none; }
+      .hero-fox .hero-mascot-img, .hero-chicken .hero-mascot-img { animation: none; }
+      /* Generic blurred button container + press states */
+      .btn-blur { position: relative; overflow: hidden; cursor: pointer; border-radius: 98px; background: transparent; box-shadow: 0 21px 39.3px -48px rgba(0,0,0,0.08); transition: transform 120ms ease, filter 120ms ease; }
+      .btn-blur::before { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; }
+      .btn-blur::after { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; }
+      .btn-blur:hover { transform: translateY(-1px) scale(1.01); }
+      .btn-blur:active { transform: translateY(1px) scale(0.985); filter: brightness(0.95); }
+      .btn-blur img { display:block; border-radius: inherit; }
+      /* Figma-correct shadow without clipping */
+      .btn-shadow { position: absolute; width: 205px; height: 64px; border-radius: 98px; box-shadow: 0 21px 64px -48px rgba(0,0,0,0.33); }
+      .btn-surface { display: inline-flex; align-items: center; justify-content: center; width: 100%; height: 100%; border-radius: inherit; overflow: hidden; cursor: pointer; text-decoration: none; will-change: transform, filter; transition: transform 120ms cubic-bezier(.22,.61,.36,1), filter 80ms linear; }
+      /* Support a base transform via CSS vars to allow per-button scaling without breaking hover/active */
+      .btn-surface { --base-translateY: 0px; --base-scale: 1; transform: translateY(var(--base-translateY)) scale(var(--base-scale)); }
+      .btn-surface:hover { transform: translateY(calc(var(--base-translateY) - 2px)) scale(calc(var(--base-scale) * 1.02)); }
+      .btn-surface:active { transform: translateY(calc(var(--base-translateY) + 2px)) scale(calc(var(--base-scale) * 0.975)); filter: brightness(0.9); }
+      .btn-surface img { width: 100%; height: 100%; display: block; border-radius: inherit; }
+      /* Utility: let button size to its intrinsic image size */
+      .btn-auto { width: auto !important; height: auto !important; display: inline-flex; }
+      /* Button effects: get_started glow, join pulse, joini-butt2 press-in */
+      .btn-get-glow { position: relative; isolation: isolate; }
+      /* Neutral aura + shimmer line (no color shift) */
+      .btn-get-glow::after { content:""; position:absolute; inset:0; border-radius: inherit; pointer-events:none; z-index:1; background:
+        radial-gradient(120% 140% at 50% 50%, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.06) 40%, rgba(0,0,0,0) 55%);
+        filter: blur(10px);
+        opacity: .55;
+        animation: btn-glow 3s ease-in-out infinite;
+        mix-blend-mode: screen;
+      }
+      .btn-get-glow::before { content:""; position:absolute; top:-20%; left:-30%; width: 160%; height: 160%; border-radius: 20%; pointer-events:none; z-index:2; background: linear-gradient(60deg, rgba(255,255,255,0) 45%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0) 55%); transform: translateX(-120%) rotate(12deg); animation: btn-shimmer 2.6s cubic-bezier(.22,.61,.36,1) infinite; mix-blend-mode: screen; }
+      @keyframes btn-glow { 0%,100% { opacity: .55; } 50% { opacity: .9; } }
+      @keyframes btn-shimmer { 0% { transform: translateX(-120%) rotate(12deg); opacity: 0; } 15% { opacity: .9; } 60% { opacity: .9; } 100% { transform: translateX(120%) rotate(12deg); opacity: 0; } }
+
+      .btn-join-pulse { position: relative; isolation: isolate; animation: btn-pulse 2s ease-in-out infinite; }
+      /* Do NOT animate transform on the anchor to preserve translateX(-50%) centering */
+      @keyframes btn-pulse { 0%, 100% { filter: brightness(1) saturate(1); } 50% { filter: brightness(1.18) saturate(1.18); } }
+      .btn-join-pulse::after { content:""; position:absolute; inset:0; border-radius: inherit; pointer-events:none; z-index:0; box-shadow: 0 0 42px rgba(255,255,255,0.35), 0 0 90px rgba(0,221,255,0.45); opacity: .55; animation: btn-pulse-glow 2s ease-in-out infinite; }
+      @keyframes btn-pulse-glow { 0%, 100% { opacity: .40; } 50% { opacity: .95; } }
+      .btn-join-pulse::before { content:""; position:absolute; left:50%; top:50%; width: 120%; height: 120%; transform: translate(-50%, -50%); border-radius: inherit; pointer-events:none; z-index:-1; border: 3px solid rgba(0,221,255,0.6); opacity: .9; animation: btn-ring 2s ease-out infinite; filter: blur(1.5px); }
+      @keyframes btn-ring { 0% { opacity:.9; transform: translate(-50%, -50%) scale(0.85); } 100% { opacity:0; transform: translate(-50%, -50%) scale(1.4); } }
+      /* Subtle image scale to amplify pulse while keeping anchor centered */
+      .btn-join-pulse img { transform-origin: center center; animation: btn-pulse-img 2s ease-in-out infinite; }
+      @keyframes btn-pulse-img { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+
+      .btn-press-in { position: relative; transition: transform 160ms cubic-bezier(.22,.61,.36,1), filter 160ms linear, box-shadow 160ms ease; box-shadow: 0 14px 40px -20px rgba(0,0,0,.45); }
+      .btn-press-in::before { content:""; position:absolute; inset:0; border-radius: inherit; pointer-events:none; background: linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0) 40%); mix-blend-mode: screen; }
+      .btn-press-in:hover { transform: translateY(-2px); box-shadow: 0 24px 60px -24px rgba(0,0,0,.55); }
+      .btn-press-in:active { transform: translateY(2px) scale(0.985); filter: brightness(0.96) contrast(1.06); box-shadow: 0 6px 18px -10px rgba(0,0,0,.55), inset 0 10px 28px rgba(0,0,0,0.35); }
+      .btn-press-in:active::after { content:""; position:absolute; inset:0; border-radius: inherit; pointer-events:none; box-shadow: inset 0 10px 28px rgba(0,0,0,0.35); }
+
+      /* Attention effect for joini-butt2 */
+      .btn-attract { position: relative; isolation: isolate; }
+      .btn-attract::after { content:""; position:absolute; inset:0; border-radius: inherit; pointer-events:none; z-index:0; box-shadow: 0 0 22px rgba(255,255,255,0.18), 0 0 48px rgba(255, 200, 0, 0.25); opacity: .35; animation: attract-glow 2.6s ease-in-out infinite; }
+      @keyframes attract-glow { 0%, 100% { opacity: .25; } 50% { opacity: .6; } }
+      .btn-attract::before { content:""; position:absolute; top:-25%; left:-35%; width:170%; height:170%; border-radius: 22%; pointer-events:none; z-index:1; background: linear-gradient(60deg, rgba(255,255,255,0) 46%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0) 54%); transform: translateX(-130%) rotate(10deg); animation: attract-shimmer 2.8s cubic-bezier(.22,.61,.36,1) infinite; mix-blend-mode: screen; }
+      @keyframes attract-shimmer { 0% { transform: translateX(-130%) rotate(10deg); opacity: 0; } 20% { opacity: .9; } 65% { opacity: .9; } 100% { transform: translateX(130%) rotate(10deg); opacity: 0; } }
+      
+      /* Shimmer-only effect (unified shine without glow) */
+      .btn-shine-only { position: relative; isolation: isolate; }
+      .btn-shine-only::before { content: none !important; }
+      .btn-shine-clip { position:absolute; inset:0; border-radius: inherit; pointer-events:none; overflow:hidden; box-sizing:border-box; z-index:1; }
+      .btn-shine-clip::after { content:""; position:absolute; inset:0; border-radius: inherit; pointer-events:none; background: radial-gradient(120% 140% at 50% 50%, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.05) 40%, rgba(0,0,0,0) 60%); opacity:.35; animation: btn-soft-glow var(--glow-dur, 2.6s) ease-in-out infinite; }
+      .btn-shine-line { position:absolute; top:4px; bottom:14px; left:50%; width:48px; transform: translateX(-50%); background: linear-gradient(60deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0) 60%); filter: blur(0.5px); animation: shine-line var(--shine-dur, 2.6s) cubic-bezier(.22,.61,.36,1) infinite; }
+      @keyframes shine-line { 0% { transform: translateX(-50%) translateX(-120px); opacity:0; } 15% { opacity:.9; } 60% { opacity:.9; } 100% { transform: translateX(-50%) translateX(120px); opacity:0; } }
+      @media (prefers-reduced-motion: reduce) {
+        .btn-get-glow::before, .btn-get-glow::after,
+        .btn-join-pulse::before, .btn-join-pulse::after, .btn-join-pulse img,
+        .btn-attract::before, .btn-attract::after,
+        .btn-shine-only::before,
+        .btn-shine-clip::after,
+        .btn-shine-line { animation: none !important; opacity: 0 !important; }
+      }
+
+      /* Mobile FAQ overrides */
+      @media (max-width: 767px) {
+        .faq-mobile-bg { background-size: cover; background-position: center; }
+        .faq-wrap-mobile { position: relative; margin: 0 auto; width: calc(100% - 16px); max-width: 420px; padding: 0; border-radius: 32px; background: #006200; border: 1px solid #000; overflow: hidden; box-shadow: 0 4px 0 #003b00; }
+        /* Alternating header tones, no inner separators */
+        .faq-wrap-mobile .faq-item-header { width: 100%; height: 56px; padding: 0 16px 0 28px; display:flex; align-items:center; }
+        .faq-wrap-mobile .faq-item:nth-child(odd) .faq-item-header { background:#0a6f00; }
+        .faq-wrap-mobile .faq-item:nth-child(even) .faq-item-header { background:#096800; }
+        .faq-wrap-mobile .faq-item:first-child .faq-item-header { border-top-left-radius:20px; border-top-right-radius:20px; }
+        .faq-wrap-mobile .faq-item:last-child .faq-item-header { border-bottom-left-radius:20px; border-bottom-right-radius:20px; }
+        .faq-wrap-mobile .faq-title { font-size: 20px; letter-spacing: 0; text-shadow: 0 2px 0 #000; }
+        .faq-wrap-mobile .faq-toggle { font-size: 14px; padding: 6px 10px; }
+        .faq-wrap-mobile .faq-answer { margin-left: 28px; max-width: calc(100% - 44px); font-size: 17px; line-height: 1.35; padding: 0 16px 12px 0; }
+        .faq-wrap-mobile .faq-item.open .faq-answer { max-height: 600px; }
+        .faq-wrap-mobile .faq-item { margin-bottom: 0; }
+        .faq-bg-img { display:block; width:100%; height:auto; pointer-events:none; }
+        .faq-panel { position:absolute; left:50%; transform:translateX(-50%); top:450px; }
+      }
+    </style>
+    <link rel="stylesheet" href="./mobile-faq.css?v=2" />
+  </head>
+  <body class="bg-[#0d1f10] text-white">
+    <!-- ============ MOBILE VERSION (images stacked in design order) ============ -->
+    <div class="md:hidden">
+      <!-- Mobile Overlay Menu (hidden by default) -->
+      <div id="mobileNav" class="mnav hidden">
+        <div class="mnav-backdrop" id="mobileNavBackdrop"></div>
+        <div class="mnav-panel mnav-enter mnav-enter-active">
+          <img src="./assets/cup_mobile.png" alt="Somnia Staking Cup" class="mnav-logo" />
+          <nav class="mnav-links">
+            <a class="mnav-link" href="#what-is">About</a>
+            <a class="mnav-link" href="#stake">Stake Your SOMI</a>
+            <a class="mnav-link" href="#how">How the Cup Works</a>
+            <a class="mnav-link" href="#rewards">Rewards</a>
+            <a class="mnav-link" href="#why">Why Join the Cup</a>
+            <a class="mnav-link" href="#faq">FAQ</a>
+          </nav>
+          <button id="closeMobileNav" class="mnav-close" aria-label="Close menu">✕</button>
+        </div>
+      </div>
+      <!-- Mobile Hero with pixel positioned overlays -->
+      <section id="m-hero" class="relative">
+        <img src="./assets/mobile/Hero_section.png" alt="Hero section" class="block w-full h-auto select-none" />
+        <!-- Menu button (overlay) -->
+        <button id="menuBtn" aria-label="Menu" class="absolute right-4 top-4 w-[88px] h-[88px]">
+          <img src="./assets/mobile/Menu.png" alt="Menu" class="w-full h-full" />
+        </button>
+        <!-- Join CTA (overlay) -->
+        <a href="/staking-cup/qualifiers" class="absolute left-1/2 -translate-x-1/2 bottom-[120px] w-[320px] h-[64px]" aria-label="Join the cup">
+          <img src="./assets/mobile/joini-butt.png" alt="Join" class="w-full h-full" />
+        </a>
+      </section>
+      <!-- What is + Get Started (overlay), pulled up towards hero -->
+      <section id="m-what-is" class="relative -mt-[40px]">
+        <img src="./assets/mobile/what_is_section.png" alt="What is section" class="block w-full h-auto select-none" />
+        <a href="/staking-cup/qualifiers" class="absolute left-1/2 -translate-x-1/2 bottom-[48px] inline-block" aria-label="Get started">
+          <img src="./assets/mobile/get_started.png" alt="Get started" class="w-[320px] h-auto" />
+        </a>
+      </section>
+      <section id="m-stake" class="relative -mt-[30px]">
+        <img src="./assets/mobile/stake_somi_section.png" alt="Stake SOMI section" class="block w-full h-auto select-none" />
+      </section>
+      <section id="m-how" class="relative -mt-[160px]">
+        <img src="./assets/mobile/how_the_section.png" alt="How the cup works section" class="block w-full h-auto select-none" />
+      </section>
+      <!-- Mobile ticker (marquee) -->
+      <section id="m-ticker" class="relative h-[120px] bg-[#0f0f0f] overflow-hidden -mt-[20px]">
+        <div class="ticker-mask">
+          <div class="ticker-row ticker-row-1">
+            <div class="ticker-content text-[64px] leading-[96px] font-normal uppercase">
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+            </div>
+            <div class="ticker-content text-[64px] leading-[96px] font-normal uppercase" aria-hidden="true">
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+              <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <img src="./assets/mobile/rewards_section.png" alt="Rewards section" class="block w-full h-auto select-none" />
+      <img src="./assets/mobile/golden_boots_section.png" alt="Golden boots" class="block w-full h-auto select-none" />
+      <!-- Why join with overlaid join button at the seam -->
+      <section id="m-why" class="relative">
+        <img src="./assets/mobile/why_join_section.png" alt="Why join section" class="block w-full h-auto select-none" />
+        <a href="/staking-cup/qualifiers" class="absolute left-1/2 -translate-x-1/2 bottom-[-24px] inline-block z-10 btn-press-in btn-attract" aria-label="Join">
+          <img src="./assets/mobile/joini-butt2.png" alt="Join" class="w-[320px] h-auto" />
+        </a>
+      </section>
+      <!-- Interactive Mobile FAQ over full mobile background -->
+      <section id="m-faq" class="relative">
+        <img src="./assets/mobile/faq_section.png" alt="FAQ background" class="faq-bg-img select-none" />
+        <div class="mfaq-panel faq-panel" style="top:450px;">
+          <div class="mfaq-panel-inner">
+            <!-- Row 1 (open) -->
+            <div class="mfaq-item tone-a open" data-index="0" style="top:0px; height:115px;">
+              <div class="mfaq-title">WHAT IS THE SOMNIA STAKING CUP?</div>
+              <button class="mfaq-toggle" aria-expanded="true">
+                <span class="ball">⚽</span>
+                <span>Close</span>
+              </button>
+              <div class="mfaq-answer-row">
+                It’s a gamified staking competition where Stakers and Validators compete for token rewards, NFTs, and boosted APR over the course of a year.
+              </div>
+            </div>
+            <!-- Row 2 -->
+            <div class="mfaq-item tone-b" data-index="1" style="top:115px; height:115px;">
+              <div class="mfaq-title">HOW DO I JOIN?</div>
+              <button class="mfaq-toggle" aria-expanded="false" style="left:246px;">
+                <span class="ball">⚽</span>
+                <span>Expand</span>
+              </button>
+              <div class="mfaq-answer-row">Answer goes here.</div>
+            </div>
+            <!-- Row 3 -->
+            <div class="mfaq-item tone-a" data-index="2" style="top:230px; height:115px;">
+              <div class="mfaq-title">WHAT’S THE LEADERBOARD?</div>
+              <button class="mfaq-toggle" aria-expanded="false" style="left:246px;">
+                <span class="ball">⚽</span>
+                <span>Expand</span>
+              </button>
+              <div class="mfaq-answer-row">Answer goes here.</div>
+            </div>
+            <!-- Row 4 -->
+            <div class="mfaq-item tone-b" data-index="3" style="top:345px; height:115px;">
+              <div class="mfaq-title">WHAT ARE STAKER NFTS?</div>
+              <button class="mfaq-toggle" aria-expanded="false" style="left:246px;">
+                <span class="ball">⚽</span>
+                <span>Expand</span>
+              </button>
+              <div class="mfaq-answer-row">Answer goes here.</div>
+            </div>
+            <!-- Row 5 -->
+            <div class="mfaq-item tone-a" data-index="4" style="top:460px; height:115px;">
+              <div class="mfaq-title">WHAT’S A GOLDEN STAKER NFT?</div>
+              <button class="mfaq-toggle" aria-expanded="false" style="left:246px;">
+                <span class="ball">⚽</span>
+                <span>Expand</span>
+              </button>
+              <div class="mfaq-answer-row">Answer goes here.</div>
+            </div>
+            <!-- Row 6 -->
+            <div class="mfaq-item tone-b" data-index="5" style="top:575px; height:115px;">
+              <div class="mfaq-title">WHAT DO VALIDATORS GET?</div>
+              <button class="mfaq-toggle" aria-expanded="false" style="left:246px;">
+                <span class="ball">⚽</span>
+                <span>Expand</span>
+              </button>
+              <div class="mfaq-answer-row">Answer goes here.</div>
+            </div>
+            <!-- Global answer container removed for true accordion behavior -->
+          </div>
+        </div>
+      </section>
+      <section id="m-footer" class="relative -mt-[40px]">
+        <img src="./assets/mobile/footer_section.png" alt="Footer section" class="block w-full h-auto select-none" />
+      </section>
+    </div>
+
+    <!-- ============ DESKTOP VERSION (hidden on mobile) ============ -->
+    <div class="hidden md:block">
+    <!-- ============ NAVBAR REMOVED (using in-hero nav) ============ -->
+
+    <!-- ============ HERO ============ -->
+    <section id="top" class="relative overflow-hidden md:h-[1053px]">
+      <div class="absolute inset-0 -z-10 bg-center bg-no-repeat bg-cover" style="background-image:url('./assets/hero-bg.png')"></div>
+      <div class="mx-auto max-w-6xl px-4 pt-6 md:pt-8 h-full flex flex-col">
+        <!-- In-hero pill navigation pixel-perfect, positioned by Figma coords -->
+        <div class="menu-wrap">
+          <img src="./assets/OBJECTS.png" alt="Trophy" style="position:absolute; left:-70px; top:-22px; width:140px; height:126px;" />
+          <a href="#what-is" class="menu-link" style="width:79px;"><div class="menu-label">About</div></a>
+          <a href="#stake" class="menu-link" style="width:144px;"><div class="menu-label">Stake Your SOMI</div></a>
+          <a href="#how" class="menu-link" style="width:161px;"><div class="menu-label">How the Cup Works</div></a>
+          <a href="#rewards" class="menu-link" style="width:96px;"><div class="menu-label">Rewards</div></a>
+          <a href="#why" class="menu-link" style="width:149px;"><div class="menu-label">Why Join the Cup</div></a>
+          <a href="#faq" class="menu-link" style="width:63px;"><div class="menu-label">FAQ</div></a>
+          <div class="menu-inner-highlight"></div>
+        </div>
+        <div class="btn-shadow" style="left:50%; top:900px !important; transform:translateX(-50%); border-radius:98px; box-shadow: 0 21px 64px -48px rgba(0,0,0,0.33); z-index:10;">
+          <a href="/staking-cup/qualifiers" class="btn-surface btn-attract btn-press-in btn-auto" style="--base-scale:1.24;">
+            <img src="./assets/joini-butt.png" alt="Join" />
+          </a>
+        </div>
+        <div class="max-w-3xl h-full"></div>
+      </div>
+      <!-- Center hero trophy shine overlay (positioned to trophy bounds from Figma) -->
+      <div class="trophy-wrap" style="position:absolute; left:50%; top:320px; transform:translateX(-50%); width:300px; height:360px; z-index:1;">
+        <div class="trophy-shines" aria-hidden="true">
+          <span class="shine shine-top"></span>
+        </div>
+      </div>
+
+      
+    </section>
+
+    <!-- Helper: applies offset for sticky header -->
+    <style>
+      section[id] { scroll-margin-top: 96px; }
+    </style>
+
+    <!-- ============ WHAT IS (overlaps hero) ============ -->
+    <section id="what-is" class="relative -mt-24 md:-mt-32 scroll-mt-24">
+      <div class="relative">
+        <div class="absolute inset-0 -z-10 bg-top bg-no-repeat bg-cover" style="background-image:url('./assets/whatis-bg.png')"></div>
+        <!-- spacer to control visible height without cropping background -->
+        <div class="min-h-[720px] md:min-h-[820px]"></div>
+        <!-- Get Started button (from Figma 6681:3100) -->
+        <div class="btn-shadow" style="left:1048px !important; top:550px !important; z-index:20;">
+          <a href="/staking-cup/qualifiers" class="btn-surface btn-get-glow btn-shine-only" style="--shine-dur:2.6s; --glow-dur:2.6s;">
+            <span class="btn-shine-clip"><span class="btn-shine-line"></span></span>
+            <img src="./assets/get_started.png" alt="Get Started" />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STAKE YOUR SOM (overlaps what-is) ============ -->
+    <section id="stake" class="relative -mt-[123px] md:-mt-[187px] z-10 scroll-mt-24 md:h-[1116px]">
+      <div class="absolute inset-0 -z-10 bg-top bg-no-repeat bg-cover" style="background-image:url('./assets/stake-bg.png')"></div>
+      <div class="mx-auto max-w-6xl px-4 py-12 md:py-0 min-h-[900px] flex items-center"></div>
+    </section>
+
+    <!-- ============ HOW THE CUP (overlaps stake) ============ -->
+    <section id="how" class="relative -mt-[93px] md:-mt-[153px] z-20 scroll-mt-24">
+      <img src="./assets/how-bg.png" alt="How the Cup works" class="block w-full h-auto select-none pointer-events-none" />
+    </section>
+
+    <!-- ============ TICKER ============ -->
+    <section id="ticker" class="relative scroll-mt-24 md:h-[160px] bg-[#0f0f0f] -mt-[40px]">
+      <!-- Join button placed just above the ticker -->
+      <a href="/staking-cup/qualifiers" class="btn-surface btn-shine-only" style="--shine-dur:2.6s; --glow-dur:2.6s; position:absolute; left:50%; top:-40px; transform:translateX(-50%); width:352px; height:64px; display:inline-flex; align-items:center; justify-content:center; z-index:20; border-radius:98px; overflow:hidden;">
+        <span class="btn-shine-clip"><span class="btn-shine-line"></span></span>
+        <img src="./assets/join-butt.png" alt="Join the cup" style="width:352px; height:64px; object-fit:contain;" />
+      </a>
+      <div class="ticker-mask">
+        <!-- Single row moving left: "Stake." red, "Compete. Win." cyan -->
+        <div class="ticker-row ticker-row-1">
+          <div class="ticker-content text-[132px] leading-[198px] font-normal uppercase">
+            <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+            <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+            <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+            <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+            <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+            <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+          </div>
+          <div class="ticker-content text-[132px] leading-[198px] font-normal uppercase" aria-hidden="true">
+            <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+            <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+            <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+            <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+            <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+            <span class="inline-flex"><span class="ticker-red">Stake.</span><span class="ticker-gap" aria-hidden="true"></span><span class="ticker-blue">Compete. Win.</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+
+    <!-- ============ REWARDS ============ -->
+    <section id="rewards" class="relative scroll-mt-24 md:h-[1465px]">
+      <div class="absolute inset-0 -z-10 bg-center bg-cover" style="background-image:url('./assets/rewards-bg.png')"></div>
+      <div class="mx-auto max-w-6xl px-4 pt-12 md:py-0 h-full flex items-center">
+        <div class="w-full"></div>
+      </div>
+    </section>
+
+    <!-- ============ GOLDEN BOOTS ============ -->
+    <section id="golden-boots" class="relative md:h-[227px]">
+      <div class="absolute inset-0 -z-10 bg-center bg-no-repeat bg-cover" style="background-image:url('./assets/golden boots.png')"></div>
+      <div class="mx-auto max-w-6xl px-4 h-full"></div>
+    </section>
+
+    <!-- ============ WHY JOIN ============ -->
+    <section id="why" class="relative scroll-mt-24 md:h-[1244px]">
+      <div class="absolute inset-0 -z-10 bg-center bg-cover" style="background-image:url('./assets/why-bg.png')"></div>
+      <!-- Join button 2 (from Figma 6681:26529) -->
+      <a href="/staking-cup/qualifiers" class="btn-surface btn-press-in btn-attract" style="position:absolute; left:50%; top:1091px; transform:translateX(-50%); width:352px; height:64px; display:inline-flex; align-items:center; justify-content:center; z-index:20; border-radius:98px; overflow:hidden;">
+        <img src="./assets/joini-butt2.png" alt="Join" style="width:352px; height:64px; object-fit:contain;" />
+      </a>
+      <div class="mx-auto max-w-6xl px-4 py-12 md:py-0 h-full flex items-center">
+        <div class="w-full">
+          
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============ FAQ ============ -->
+    <section id="faq" class="relative scroll-mt-24 md:h-[1283px] z-0">
+      <div class="absolute inset-0 -z-10 bg-center bg-cover" style="background-image:url('./assets/faq-bg.png')"></div>
+      <!-- Decorative assets above the interactive FAQ -->
+      <img src="./assets/Asset 28 1.png" alt="Decor" style="position:absolute; left:90px; top:254px; width:418.44px; height:225.38px; z-index:30; pointer-events:none;" />
+      <div class="mx-auto max-w-5xl px-4 py-12 md:py-0 h-full flex items-center">
+        <div class="w-full">
+          <div class="faq-wrap">
+          <div class="faq-item tone-a open" style="position: relative;">
+            <div class="faq-item-header">
+                <div class="faq-title">WHAT IS THE SOMNIA STAKING CUP?</div>
+                <button class="faq-toggle" aria-expanded="true">
+                <span class="ball" aria-hidden="true">⚽</span>
+                <span>Close</span>
+                </button>
+              </div>
+              <img src="./assets/IMG_3478 1.png" alt="Chicken" class="faq-chicken" />
+              <div class="faq-answer">
+                It’s a gamified staking competition where Stakers and Validators compete for token rewards, NFTs, and boosted APR over the course of a year.
+              </div>
+            </div>
+          <div class="faq-item tone-b">
+            <div class="faq-item-header">
+                <div class="faq-title">HOW DO I JOIN?</div>
+                <button class="faq-toggle" aria-expanded="false">
+                <span class="ball" aria-hidden="true">⚽</span>
+                <span>Expand</span>
+                </button>
+              </div>
+              <div class="faq-answer" style="position: relative;">
+                Answer goes here.
+                <img src="./assets/IMG_3478 1.png" alt="Chicken" class="faq-chicken" />
+              </div>
+            </div>
+          <div class="faq-item tone-a">
+            <div class="faq-item-header">
+                <div class="faq-title">WHAT’S THE LEADERBOARD?</div>
+                <button class="faq-toggle" aria-expanded="false">
+                <span class="ball" aria-hidden="true">⚽</span>
+                <span>Expand</span>
+                </button>
+              </div>
+              <div class="faq-answer" style="position: relative;">
+                Answer goes here.
+                <img src="./assets/IMG_3478 1.png" alt="Chicken" class="faq-chicken" />
+              </div>
+            </div>
+          <div class="faq-item tone-b">
+            <div class="faq-item-header">
+                <div class="faq-title">WHAT ARE STAKER NFTS?</div>
+                <button class="faq-toggle" aria-expanded="false">
+                <span class="ball" aria-hidden="true">⚽</span>
+                <span>Expand</span>
+                </button>
+              </div>
+              <div class="faq-answer" style="position: relative;">
+                Answer goes here.
+                <img src="./assets/IMG_3478 1.png" alt="Chicken" class="faq-chicken" />
+              </div>
+            </div>
+          <div class="faq-item tone-a">
+            <div class="faq-item-header">
+                <div class="faq-title">WHAT’S A GOLDEN STAKER NFT?</div>
+                <button class="faq-toggle" aria-expanded="false">
+                <span class="ball" aria-hidden="true">⚽</span>
+                <span>Expand</span>
+                </button>
+              </div>
+              <div class="faq-answer" style="position: relative;">
+                Answer goes here.
+                <img src="./assets/IMG_3478 1.png" alt="Chicken" class="faq-chicken" />
+              </div>
+            </div>
+          <div class="faq-item tone-b">
+            <div class="faq-item-header">
+                <div class="faq-title">WHAT DO VALIDATORS GET?</div>
+                <button class="faq-toggle" aria-expanded="false">
+                <span class="ball" aria-hidden="true">⚽</span>
+                <span>Expand</span>
+                </button>
+              </div>
+              <div class="faq-answer" style="position: relative;">
+                Answer goes here.
+                <img src="./assets/IMG_3478 1.png" alt="Chicken" class="faq-chicken" />
+              </div>
+            </div>
+          <div class="faq-item tone-a">
+            <div class="faq-item-header">
+                <div class="faq-title">ARE REWARDS ONLY MONTHLY?</div>
+                <button class="faq-toggle" aria-expanded="false">
+                <span class="ball" aria-hidden="true">⚽</span>
+                <span>Expand</span>
+                </button>
+              </div>
+              <div class="faq-answer" style="position: relative;">
+                Answer goes here.
+                <img src="./assets/IMG_3478 1.png" alt="Chicken" class="faq-chicken" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BLACK GRASS (moved below FAQ) ============ -->
+    <section id="black-grass" class="relative -mt-6 md:-mt-10 md:h-[230px] z-10">
+      <div class="absolute inset-0 -z-10 bg-center bg-repeat-x bg-contain" style="background-image:url('./assets/black-grass.png'); background-position:center -30px"></div>
+      <div class="mx-auto max-w-6xl px-4 h-full"></div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="relative md:h-[1058px] -mt-[185px] z-[60] bg-center bg-cover bg-no-repeat bg-black" style="background-image:url('./assets/footer-bg.png')">
+      <div class="mx-auto max-w-6xl px-4 py-10 md:py-0 h-full flex items-center">
+        <div class="w-full"></div>
+      </div>
+    </footer>
+    </div>
+
+    <!-- Mobile menu toggling -->
+    <script>
+      const btn = document.getElementById('menuBtn');
+      const nav = document.getElementById('mobileNav');
+      const navBackdrop = document.getElementById('mobileNavBackdrop');
+      const closeBtn = document.getElementById('closeMobileNav');
+      function setBodyScroll(lock) { document.documentElement.style.overflow = lock ? 'hidden' : ''; document.body.style.overflow = lock ? 'hidden' : ''; }
+      function openNav() { if (!nav) return; nav.classList.remove('hidden'); setBodyScroll(true); }
+      function closeNav() { if (!nav) return; nav.classList.add('hidden'); setBodyScroll(false); }
+      if (btn && nav) {
+        btn.addEventListener('click', () => { if (nav.classList.contains('hidden')) openNav(); else closeNav(); });
+        if (closeBtn) closeBtn.addEventListener('click', closeNav);
+        if (navBackdrop) navBackdrop.addEventListener('click', closeNav);
+        // Close mobile nav when clicking a link
+        nav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+      }
+
+      // FAQ accordion interactions (desktop + mobile + pixel-accurate mobile)
+      (function(){
+        // Desktop + legacy mobile
+        document.querySelectorAll('.faq-wrap .faq-toggle, .faq-wrap-mobile .faq-toggle').forEach(toggle => {
+          toggle.addEventListener('click', () => {
+            const item = toggle.closest('.faq-item');
+            const isOpen = item.classList.contains('open');
+            item.parentElement.querySelectorAll('.faq-item').forEach(i => {
+              i.classList.remove('open');
+              const t = i.querySelector('.faq-toggle');
+              if (t) t.setAttribute('aria-expanded', 'false');
+              const label = i.querySelector('.faq-toggle span:last-child');
+              if (label) label.textContent = 'Expand';
+            });
+            if (!isOpen) {
+              item.classList.add('open');
+              toggle.setAttribute('aria-expanded', 'true');
+              const label = toggle.querySelector('span:last-child');
+              if (label) label.textContent = 'Close';
+            }
+          });
+        });
+
+        // Pixel-accurate mobile accordion: row expands, rows below shift down
+        const headerTops = [0, 115, 230, 345, 460, 575];
+        const baseRowHeight = 115;
+        const HEADER_OFFSET = 129; // 115px шапка + 14px зазор (даёт место между шапкой и ответом)
+
+        function layoutAccordion(openIndex) {
+          const rows = Array.from(document.querySelectorAll('.mfaq-panel .mfaq-item'));
+          let extra = 0;
+          rows.forEach((row, i) => {
+            const toggle = row.querySelector('.mfaq-toggle');
+            const label = toggle ? toggle.querySelector('span:last-child') : null;
+            const isOpen = i === openIndex;
+            if (isOpen) {
+              const answerEl = row.querySelector('.mfaq-answer-row');
+              const answerHeight = Math.min(answerEl ? answerEl.scrollHeight : 0, 320);
+              row.classList.add('open');
+              // Height = header area + header-to-answer gap (padding-top via CSS) + answer content
+              row.style.height = (baseRowHeight + HEADER_OFFSET + answerHeight) + 'px';
+              if (toggle) toggle.setAttribute('aria-expanded', 'true');
+              if (label) label.textContent = 'Close';
+              extra = HEADER_OFFSET + answerHeight; // shift next rows by the extra content opened
+            } else {
+              row.classList.remove('open');
+              row.style.height = baseRowHeight + 'px';
+              if (toggle) toggle.setAttribute('aria-expanded', 'false');
+              if (label) label.textContent = 'Expand';
+            }
+            const baseTop = headerTops[i] + (i > openIndex && openIndex !== -1 ? extra : 0);
+            row.style.top = baseTop + 'px';
+          });
+        }
+
+        // Init with first row open
+        layoutAccordion(0);
+
+        document.querySelectorAll('.mfaq-toggle').forEach((toggle, idx) => {
+          const handler = (ev) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+            const row = toggle.closest('.mfaq-item');
+            if (!row) return;
+            const index = Number(row.getAttribute('data-index')) || idx;
+            const willOpen = !row.classList.contains('open');
+            layoutAccordion(willOpen ? index : -1);
+          };
+          toggle.addEventListener('click', handler, { passive: false });
+          toggle.addEventListener('touchend', handler, { passive: false });
+        });
+      })();
+      
+    </script>
+  </body>
+  </html>

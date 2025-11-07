@@ -3,11 +3,12 @@ import { formatPct } from '@/lib/format';
 
 type Props = { burnRate?: number; stakingApr?: number; realYield?: number };
 
+// Expect these PNGs to be placed under public/assets/ (Figma export)
 const ICONS = {
-  burn: 'http://localhost:3845/assets/1f02168d25d9007dc8cc90f0dfab8c032887485d.svg',
-  rocket: 'http://localhost:3845/assets/b3632efe8cf0e78a3a390b167fee3134af3801cd.svg',
-  diamond: 'http://localhost:3845/assets/db8e6375036bd816c3adc13bd937e6632766588d.svg',
-  info: 'http://localhost:3845/assets/90216cda230668eac99ed2dc032e74586f7eca56.svg'
+  burn: '/assets/mingcute_fire-line.png',
+  rocket: '/assets/mingcute_rocket-line.png',
+  diamond: '/assets/material-symbols_diamond-shine-outline.png',
+  info: '/assets/material-symbols_diamond-shine-outline.png', // small info icon; replace if separate asset provided
 };
 
 function Pill({

@@ -1,0 +1,23 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Pattern" filter="url(#filter0_i_3825_1494)">
+<g id="Vector">
+<path d="M60.7407 31.1111C67.2863 31.1111 72.5925 25.8048 72.5925 19.2592C72.5925 12.7136 67.2863 7.40735 60.7407 7.40735C54.1951 7.40735 48.8888 12.7136 48.8888 19.2592C48.8888 25.8048 54.1951 31.1111 60.7407 31.1111Z" fill="#333BFF"/>
+<path d="M31.1111 19.2593C31.1111 25.8049 25.8049 31.1111 19.2593 31.1111C12.7137 31.1111 7.40741 25.8049 7.40741 19.2593C7.40741 12.7137 12.7137 7.40741 19.2593 7.40741C25.8049 7.40741 31.1111 12.7137 31.1111 19.2593Z" fill="#333BFF"/>
+<path d="M31.1111 60.7407C31.1111 67.2863 25.8048 72.5925 19.2592 72.5925C12.7136 72.5925 7.40735 67.2863 7.40735 60.7407C7.40735 54.1951 12.7136 48.8888 19.2592 48.8888C25.8048 48.8888 31.1111 54.1951 31.1111 60.7407Z" fill="#333BFF"/>
+<path d="M51.8518 39.9999C51.8518 46.5455 46.5455 51.8518 39.9999 51.8518C33.4543 51.8518 28.1481 46.5455 28.1481 39.9999C28.1481 33.4543 33.4543 28.1481 39.9999 28.1481C46.5455 28.1481 51.8518 33.4543 51.8518 39.9999Z" fill="#333BFF"/>
+<path d="M60.7407 72.5925C67.2863 72.5925 72.5925 67.2863 72.5925 60.7407C72.5925 54.1951 67.2863 48.8888 60.7407 48.8888C54.1951 48.8888 48.8888 54.1951 48.8888 60.7407C48.8888 67.2863 54.1951 72.5925 60.7407 72.5925Z" fill="#333BFF"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_i_3825_1494" x="0" y="0" width="80" height="81" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="1"/>
+<feGaussianBlur stdDeviation="0.5"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+<feBlend mode="overlay" in2="shape" result="effect1_innerShadow_3825_1494"/>
+</filter>
+</defs>
+</svg>

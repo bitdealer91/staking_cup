@@ -2,8 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    unoptimized: true
-  }
+    unoptimized: true,
+    remotePatterns: [
+      { protocol: 'https', hostname: 'api.dicebear.com' },
+    ],
+  },
 };
 
 export default nextConfig;
