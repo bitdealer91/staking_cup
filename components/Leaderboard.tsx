@@ -348,7 +348,8 @@ export default function Leaderboard() {
               v={v}
               onDelegate={() => {
                 if (!address) { openConnectModal(true); return; }
-                setPreselected(v);
+                const match = allValidators.find(av => av.address.toLowerCase() === v.address.toLowerCase());
+                setPreselected(match ?? v);
                 setShowDelegate(true);
               }}
               showSee={activeBtn === 'see'}
@@ -375,6 +376,7 @@ export default function Leaderboard() {
         onOpenChange={(open) => { setShowDelegate(open); if (!open) setPreselected(null); }}
         preselectedValidator={preselected}
         maxTotalValidatorStake={maxTotalValidatorStake as any}
+        connectedAddress={address}
       />
       {/* DelegationsModal moved to SiteHeader */}
     </div>

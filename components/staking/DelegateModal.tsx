@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { useAccount, useWriteContract, usePublicClient } from "wagmi";
+import { useAccount, useWriteContract, usePublicClient, useChainId, useSwitchChain } from "wagmi";
 import { parseEther, formatEther } from "viem";
 import stakingAbi from "@/components/abi/SomniaStaking.json";
 import type { Abi } from "viem";
@@ -36,6 +36,7 @@ interface DelegateModalProps {
   onOpenChange?: (open: boolean) => void;
   preselectedValidator?: ValidatorData | null;
   maxTotalValidatorStake?: bigint | unknown;
+  connectedAddress?: string;
 }
 
 export function DelegateModal({
@@ -44,14 +45,20 @@ export function DelegateModal({
   onOpenChange,
   preselectedValidator,
   maxTotalValidatorStake,
+  connectedAddress,
 }: DelegateModalProps) {
   const { toast } = useToast();
   const { address: userAddress } = useAccount();
+  const walletAddress = userAddress || connectedAddress;
+  const chainId = useChainId();
+  const { switchChainAsync } = useSwitchChain();
   const [selectedValidator, setSelectedValidator] = useState("");
   const [stakeAmount, setStakeAmount] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isError, setIsError] = useState(false);
   const [validatorSearch, setValidatorSearch] = useState("");
+  const [unstakeRequestTs, setUnstakeRequestTs] = useState<bigint | null>(null);
+  const [timeUntilUnstake, setTimeUntilUnstake] = useState<bigint | null>(null);
 
   const { delegators: topDelegators, loading: topLoading } = useTopDelegators(selectedValidator || undefined, 10);
 
@@ -149,6 +156,33 @@ export function DelegateModal({
     return remainingCapacityFormatted;
   }, [selectedValidator, maxTotalValidatorStake, validators]);
 
+  // Load unstake status for selected validator
+  useEffect(() => {
+    (async () => {
+      try {
+        if (!publicClient || !selectedValidator) { setUnstakeRequestTs(null); setTimeUntilUnstake(null); return; }
+        const contractAddress = process.env.NEXT_PUBLIC_STAKING_ADDRESS as `0x${string}`;
+        const ts = await publicClient.readContract({
+          address: contractAddress,
+          abi: stakingAbi.abi as Abi,
+          functionName: 'getUnstakeRequestTime',
+          args: [selectedValidator as `0x${string}`],
+        }) as bigint;
+        const until = await publicClient.readContract({
+          address: contractAddress,
+          abi: stakingAbi.abi as Abi,
+          functionName: 'getTimeUntilUnstake',
+          args: [selectedValidator as `0x${string}`],
+        }) as bigint;
+        setUnstakeRequestTs(ts);
+        setTimeUntilUnstake(until);
+      } catch {
+        setUnstakeRequestTs(null);
+        setTimeUntilUnstake(null);
+      }
+    })();
+  }, [publicClient, selectedValidator]);
+
   const handleDelegateStake = async () => {
     // Prevent multiple submissions
     if (isWriteInProgress.current || isPending) {
@@ -156,7 +190,7 @@ export function DelegateModal({
     }
 
     try {
-      if (!userAddress) {
+      if (!walletAddress) {
         toast({
           variant: "destructive",
           title: "Wallet not connected",
@@ -174,6 +208,17 @@ export function DelegateModal({
         return;
       }
 
+      // Ensure correct network
+      const expectedId = Number(process.env.NEXT_PUBLIC_NEW_CHAIN_ID) || 50311;
+      if (chainId && chainId !== expectedId) {
+        try {
+          await switchChainAsync({ chainId: expectedId });
+        } catch {
+          toast({ variant: 'destructive', title: 'Wrong Network', description: 'Please switch to the Somnia network and try again.' });
+          return;
+        }
+      }
+
       // Check if validator is at max stake or would exceed it with this delegation
       const selectedValidatorData = validators.find(
         (v) => v.address === selectedValidator
@@ -187,6 +232,11 @@ export function DelegateModal({
         });
         return;
       }
+
+      // Validate contract address is available
+      const contractAddress = process.env
+        .NEXT_PUBLIC_STAKING_ADDRESS as `0x${string}`;
+      const explorerBase = process.env.NEXT_PUBLIC_NEW_CHAIN_BLOCK_EXPLORER_URL || 'https://explorer.somnia.network';
 
       // Check if delegation amount would exceed max stake
       if (selectedValidatorData?.totalStakedWei && maxTotalValidatorStake) {
@@ -215,9 +265,40 @@ export function DelegateModal({
         }
       }
 
-      // Validate contract address is available
-      const contractAddress = process.env
-        .NEXT_PUBLIC_STAKING_ADDRESS as `0x${string}`;
+      // Ensure validator is in current committee (contract check)
+      if (publicClient) {
+        try {
+          const inCommittee = await publicClient.readContract({
+            address: contractAddress,
+            abi: stakingAbi.abi as Abi,
+            functionName: 'isValidatorInCommittee',
+            args: [selectedValidator as `0x${string}`],
+          }) as boolean;
+          if (!inCommittee) {
+            toast({
+              variant: 'destructive',
+              title: 'Validator Not Eligible',
+              description: 'Selected validator is not in the current committee.',
+            });
+            return;
+          }
+          const marked = await publicClient.readContract({
+            address: contractAddress,
+            abi: stakingAbi.abi as Abi,
+            functionName: 'isValidatorMarkedForRemoval',
+            args: [selectedValidator as `0x${string}`],
+          }) as boolean;
+          if (marked) {
+            toast({
+              variant: 'destructive',
+              title: 'Validator Pending Removal',
+              description: 'Additional delegation is blocked while validator is marked for removal.',
+            });
+            return;
+          }
+        } catch {}
+      }
+
       if (!contractAddress) {
         toast({
           variant: "destructive",
@@ -239,28 +320,42 @@ export function DelegateModal({
       // Set flag to indicate write operation is in progress
       isWriteInProgress.current = true;
 
-      // Estimate gas and 10x the limit to avoid out-of-gas
-      let gasOverride: bigint | undefined = undefined;
-      if (publicClient && userAddress) {
-        const estimate = await publicClient.estimateContractGas({
-          address: contractAddress,
-          abi: stakingAbi.abi as Abi,
-          functionName: "delegateStake",
-          args,
-          account: userAddress,
-          value,
-        });
-        gasOverride = estimate * 10n;
+      // Simulate to get an exact request (avoids RPC 400 and surfaces precise revert reasons)
+      let request: any;
+      if (publicClient) {
+        try {
+          const simulation = await publicClient.simulateContract({
+            address: contractAddress,
+            abi: stakingAbi.abi as Abi,
+            functionName: 'delegateStake',
+            args,
+            account: walletAddress as `0x${string}`,
+            value,
+          });
+          request = simulation.request;
+        } catch (simError: any) {
+          const cause: any = simError?.cause || simError;
+          const errorName = cause?.data?.errorName || cause?.shortMessage || '';
+          let nice = '';
+          if (String(errorName).includes('SomniaStaking_InsufficientStake')) nice = 'Amount is below current min stake.';
+          else if (String(errorName).includes('SomniaStaking_StakeAdditionBlocked') || String(errorName).includes('SomniaStaking_TotalUnstakeRequestActive')) nice = 'Stake addition is blocked due to an active unstake request. Complete/cancel it first.';
+          else if (String(errorName).includes('SomniaStaking_ValidatorNotInCommittee')) nice = 'Validator is not in the current committee.';
+          else if (String(errorName).includes('SomniaStaking_MaxTotalValidatorStakeExceeded')) nice = 'Validator reached the maximum allowed delegated stake.';
+          else if (String(errorName).includes('SomniaStaking_InvalidValidator')) nice = 'Validator address is not recognized by the contract.';
+          toast({ variant: 'destructive', title: 'Transaction Failed', description: nice || (cause?.shortMessage || 'Transaction requirements not met.') });
+          isWriteInProgress.current = false;
+          return;
+        }
       }
 
       // Send tx and capture hash
-      const hash = await writeContractAsync({
+      const hash = await writeContractAsync(request ?? {
         address: contractAddress,
         abi: stakingAbi.abi as Abi,
         functionName: "delegateStake",
         args,
         value,
-        ...(gasOverride ? { gas: gasOverride } : {}),
+        account: walletAddress as `0x${string}`,
       });
       setTxHash(hash);
       setTxStatus("pending");
@@ -269,7 +364,7 @@ export function DelegateModal({
         title: "Transaction submitted",
         description: (
           <a
-            href={`https://explorer.somnia.network/tx/${hash}?tab=index`}
+            href={`${explorerBase}/tx/${hash}?tab=index`}
             target="_blank"
             rel="noreferrer"
             className="underline"
@@ -293,7 +388,7 @@ export function DelegateModal({
             title: "Transaction Reverted",
             description: (
               <a
-                href={`https://explorer.somnia.network/tx/${hash}?tab=index`}
+                href={`${explorerBase}/tx/${hash}?tab=index`}
                 target="_blank"
                 rel="noreferrer"
                 className="underline"
@@ -304,7 +399,7 @@ export function DelegateModal({
           });
         } else {
           // Save pending delegation to local storage
-          if (userAddress) {
+          if (walletAddress) {
             const selectedValidatorData = validators.find(
               (v) => v.address === selectedValidator
             );
@@ -322,7 +417,7 @@ export function DelegateModal({
               }
             );
 
-            pendingDelegationsStorage.addPendingDelegation(userAddress, {
+            pendingDelegationsStorage.addPendingDelegation(walletAddress, {
               validatorAddress: selectedValidator,
               validatorName,
               delegatedAmount: parseEther(stakeAmount).toString(),
@@ -336,7 +431,7 @@ export function DelegateModal({
             title: "Success!",
             description: (
               <a
-                href={`https://explorer.somnia.network/tx/${hash}?tab=index`}
+                href={`${explorerBase}/tx/${hash}?tab=index`}
                 target="_blank"
                 rel="noreferrer"
                 className="underline"
@@ -358,10 +453,12 @@ export function DelegateModal({
           description: "User rejected transaction",
         });
       } else {
+        const msg = getErrorMessage(error);
+        const rpcReason = (error as any)?.shortMessage || (error as any)?.details || '';
         toast({
           variant: "destructive",
           title: "Transaction Failed",
-          description: getErrorMessage(error),
+          description: rpcReason ? `${msg} — ${rpcReason}` : msg,
         });
       }
     }
@@ -466,6 +563,18 @@ export function DelegateModal({
                       <div className="text-[25px] tracking-[0.5px] font-polysans">{validator.name}</div>
                       <div className="text-[17px] truncate max-w-[339px]">{validator.address}</div>
                       <div className="text-[15px] text-[#96df8e] mt-1">Total staked: {validator.totalStaked}</div>
+                      {((unstakeRequestTs ?? 0n) > 0n) && (
+                        <div className="mt-2 text-[14px] text-yellow-300">
+                          Unstake request is active.
+                          {timeUntilUnstake !== null && (
+                            <>
+                              {timeUntilUnstake > 0n
+                                ? ` You can finalize in ${Number(timeUntilUnstake)}s.`
+                                : ' You can finalize now.'}
+                            </>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -544,6 +653,7 @@ export function DelegateModal({
                   !selectedValidator ||
                   !stakeAmount ||
                   isWriteInProgress.current ||
+                  (unstakeRequestTs !== null && unstakeRequestTs > 0n) ||
                   validators.find((v) => v.address === selectedValidator)
                     ?.isAtMaxStake
                 }
@@ -554,6 +664,51 @@ export function DelegateModal({
                   ? "Processing..."
                   : "Delegate Stake"}
               </Button>
+              {selectedValidator && unstakeRequestTs !== null && unstakeRequestTs > 0n && (
+                <Button
+                  onClick={async () => {
+                    try {
+                      const expectedId = Number(process.env.NEXT_PUBLIC_NEW_CHAIN_ID) || 50311;
+                      const explorerBase = process.env.NEXT_PUBLIC_NEW_CHAIN_BLOCK_EXPLORER_URL || 'https://explorer.somnia.network';
+                      if (!walletAddress) return;
+                      // finalize total unstake if available
+                      if (publicClient) {
+                        const until = await publicClient.readContract({
+                          address: process.env.NEXT_PUBLIC_STAKING_ADDRESS as `0x${string}`,
+                          abi: stakingAbi.abi as Abi,
+                          functionName: 'getTimeUntilUnstake',
+                          args: [selectedValidator as `0x${string}`],
+                        }) as bigint;
+                        if (until > 0n) {
+                          toast({ title: 'Unstake Not Ready', description: `You can finalize in ${Number(until)}s.` });
+                          return;
+                        }
+                      }
+                      isWriteInProgress.current = true;
+                      const hash = await writeContractAsync({
+                        address: process.env.NEXT_PUBLIC_STAKING_ADDRESS as `0x${string}`,
+                        abi: stakingAbi.abi as Abi,
+                        functionName: 'totalUnstake',
+                        args: [selectedValidator as `0x${string}`],
+                        account: walletAddress as `0x${string}`,
+                      });
+                      const link = (<a href={`${explorerBase}/tx/${hash}?tab=index`} target="_blank" rel="noreferrer" className="underline">View on explorer</a>);
+                      toast({ title: 'Unstake Finalized', description: link });
+                      // refresh flags
+                      setUnstakeRequestTs(0n);
+                      setTimeUntilUnstake(0n);
+                      isWriteInProgress.current = false;
+                    } catch (e: any) {
+                      isWriteInProgress.current = false;
+                      toast({ variant: 'destructive', title: 'Finalize Failed', description: e?.shortMessage || 'Could not finalize unstake yet.' });
+                    }
+                  }}
+                  className="w-full sm:w-auto order-3 rounded-[98px] px-7 py-[22px] text-[21px]"
+                  style={{ background: "#dffc96", color: "#0a6000", boxShadow: "0px 3px 0px rgba(0,0,0,0.68)" }}
+                >
+                  Finalize Unstake
+                </Button>
+              )}
             </>
           )}
         </div>
