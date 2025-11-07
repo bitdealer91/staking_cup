@@ -9,7 +9,7 @@ import {
   YieldRatesDisplay,
 } from '@/components/staking';
 import nodeCommitteeAbi from '@/components/abi/NodeCommitteeV2.json';
-import { Abi } from 'abitype';
+import type { Abi } from 'viem';
 import { useReadContract } from 'wagmi';
 
 export default function StakingPage() {

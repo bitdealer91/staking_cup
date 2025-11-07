@@ -6,7 +6,7 @@ import { useReadContract, useReadContracts } from 'wagmi';
 import { Address } from 'viem';
 import stakingAbi from '@/components/abi/SomniaStaking.json';
 import nodeCommitteeAbi from '@/components/abi/NodeCommitteeV2.json';
-import { Abi } from 'abitype';
+import type { Abi } from 'viem';
 
 export const StatsSection = ({ validationCommittee }: { validationCommittee: any }) => {
 

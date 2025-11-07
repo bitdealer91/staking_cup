@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { useAccount, useWriteContract, usePublicClient } from "wagmi";
 import { parseEther } from "viem";
 import stakingAbi from "@/components/abi/SomniaStaking.json";
-import { Abi } from "abitype";
+import type { Abi } from "viem";
 import { useToast } from "@/hooks/use-toast";
 import { useDelegationsData, DelegationData } from "./hooks/useDelegationsData";
 import { VALIDATOR_NAMES } from "./data/validatorNames";

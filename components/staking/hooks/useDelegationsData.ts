@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useAccount, useReadContract, useReadContracts } from "wagmi";
 import stakingAbi from "@/components/abi/SomniaStaking.json";
-import { Abi } from "abitype";
+import type { Abi } from "viem";
 import { formatEther } from "viem";
 import { ValidatorNameMapping } from "./useValidatorData";
 

@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useReadContract, useReadContracts } from "wagmi";
 import nodeCommitteeAbi from "@/components/abi/NodeCommitteeV2.json";
 import stakingAbi from "@/components/abi/SomniaStaking.json";
-import { Abi } from "abitype";
+import type { Abi } from "viem";
 import { formatEther } from "viem";
 
 interface SortConfig {

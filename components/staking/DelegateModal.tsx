@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 import { useAccount, useWriteContract, usePublicClient } from "wagmi";
 import { parseEther, formatEther } from "viem";
 import stakingAbi from "@/components/abi/SomniaStaking.json";
-import { Abi } from "abitype";
+import type { Abi } from "viem";
 import { Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { pendingDelegationsStorage } from "@/lib/pendingDelegations";
